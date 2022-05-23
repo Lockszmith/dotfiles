@@ -25,5 +25,3 @@ if [ -d ~/.sz.shrc.d ]; then
   done
   unset script_source
 fi
-
-complete -C /usr/bin/terraform terraform
