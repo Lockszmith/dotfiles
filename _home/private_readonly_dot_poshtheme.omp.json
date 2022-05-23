@@ -9,7 +9,7 @@
           "foreground": "#000000",
           "leading_diamond": "\u256d\u2500\ue0b2",
           "style": "diamond",
-          "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
+          "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}}",
           "type": "os"
         },
         {
@@ -21,7 +21,7 @@
             "style": "full"
           },
           "style": "powerline",
-          "template": " \uf07c {{ .Path }} ",
+          "template": " \uf07c {{ .Path }}",
           "type": "path"
         },
         {
@@ -41,7 +41,7 @@
             "fetch_upstream_icon": true
           },
           "style": "powerline",
-          "template": " {{ .UpstreamIcon }}{{ .HEAD }}{{ .BranchStatus }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} \uf692 {{ .StashCount }}{{ end }} ",
+          "template": " {{ .UpstreamIcon }}{{ .HEAD }}{{ .BranchStatus }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} \uf692 {{ .StashCount }}{{ end }}",
           "type": "git"
         }
       ],
@@ -59,7 +59,7 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": " {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }} \uf898 ",
+          "template": "{{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }} \uf898 ",
           "type": "node"
         },
         {
@@ -71,7 +71,7 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \ue627 ",
+          "template": "{{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \ue627 ",
           "type": "go"
         },
         {
@@ -83,7 +83,7 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \ue624 ",
+          "template": "{{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \ue624 ",
           "type": "julia"
         },
         {
@@ -96,7 +96,7 @@
             "fetch_virtual_env": false
           },
           "style": "powerline",
-          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \ue235 ",
+          "template": "{{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \ue235 ",
           "type": "python"
         },
         {
@@ -109,7 +109,7 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \ue791 ",
+          "template": "{{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \ue791 ",
           "type": "ruby"
         },
         {
@@ -122,7 +122,7 @@
             "fetch_version": false
           },
           "style": "powerline",
-          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \uf0e7",
+          "template": "{{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} \uf0e7",
           "type": "azfunc"
         },
         {
@@ -137,7 +137,7 @@
             "display_default": false
           },
           "style": "powerline",
-          "template": " {{ .Profile }}{{ if .Region }}@{{ .Region }}{{ end }} \ue7ad ",
+          "template": "{{ .Profile }}{{ if .Region }}@{{ .Region }}{{ end }} \ue7ad ",
           "type": "aws"
         },
         {
@@ -146,7 +146,7 @@
           "invert_powerline": true,
           "powerline_symbol": "\ue0b2",
           "style": "powerline",
-          "template": " \uf0ad ",
+          "template": "\uf0ad ",
           "type": "root"
         },
         {
@@ -155,7 +155,7 @@
           "invert_powerline": true,
           "powerline_symbol": "\ue0b2",
           "style": "powerline",
-          "template": " {{ .FormattedMs }} \uf252 ",
+          "template": "{{ .FormattedMs }} \uf252 ",
           "type": "executiontime"
         },
         {
@@ -170,7 +170,7 @@
             "always_enabled": true
           },
           "style": "powerline",
-          "template": " {{ if gt .Code 0 }}{{ .Meaning }}{{ else }}\u2714{{ end }} ",
+          "template": "{{ if gt .Code 0 }}{{ .Meaning }}{{ else }}\u2714{{ end }} ",
           "type": "exit"
         },
         {
@@ -178,7 +178,7 @@
           "foreground": "#000000",
           "invert_powerline": true,
           "style": "diamond",
-          "template": " {{ .CurrentDate | date .Format }} \uf017 ",
+          "template": "{{ .CurrentDate | date .Format }} \uf017 ",
           "trailing_diamond": "\ue0b0\u2500\u256e",
           "type": "time"
         }
