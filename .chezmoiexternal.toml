@@ -1,10 +1,33 @@
-["my/code/from_web/chemacs2"]
-  type          = "git-repo"
-  url           = "https://github.com/plexus/chemacs2.git"
-  refreshPeriod = "168h" # 7 days
+['my/code/from_web/chemacs2']
+  type          = 'git-repo'
+  url           = 'https://github.com/plexus/chemacs2.git'
+  refreshPeriod = '168h' # 7 days
 
-[".emacs.my/spacemacs/emacs.d"]
-  type          = "git-repo"
-  url           = "https://github.com/syl20bnr/spacemacs.git"
-  clone.args    = ["--depth=1","--branch=develop"]
-  refreshPeriod = "168h" # 7 days
+['.emacs.my/spacemacs/emacs.d']
+  type          = 'git-repo'
+  url           = 'https://github.com/syl20bnr/spacemacs.git'
+  clone.args    = ['--depth=1','--branch=develop']
+  refreshPeriod = '168h' # 7 days
+
+# ['my/code/from_web/nerd-fonts']
+#   type          = 'git-repo'
+#   url           = 'https://github.com/ryanoasis/nerd-fonts.git'
+#   clone.args    = ['--depth=1']
+#   refreshPeriod = '168h' # 7 days
+
+['.local/share/fonts/NerdFonts']
+  type          = 'archive'
+  url           = 'https://github.com/ryanoasis/nerd-fonts/releases/download/2.2.0-RC/CodeNewRoman.zip'
+  exact         = true
+  refreshPeriod = '168h' # 7 days
+
+['.local/bin/oh-my-posh']
+  type          = 'file'
+  url           = 'https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64'
+  executable = true
+
+['.poshthemes']
+  type          = 'archive'
+  url           = 'https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip'
+  exact         = true
+  refreshPeriod = '168h' # 7 days

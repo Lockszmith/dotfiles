@@ -1,0 +1,3 @@
+if [ -r /usr/bin/terraform ]; then
+  complete -C /usr/bin/terraform terraform
+fi
