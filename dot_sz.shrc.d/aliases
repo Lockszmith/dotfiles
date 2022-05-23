@@ -1,0 +1,5 @@
+alias sudo="sudo "
+alias nvim="nvim -p "
+alias vim="nvim "
+alias vi="nvim "
+

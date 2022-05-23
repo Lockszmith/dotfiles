@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=CopyQ (flatpak)
+Comment=Clipboard manager
+Icon=com.github.hluk.copyq
+Type=Application
+Terminal=false
+Categories=Utility
+Exec=/usr/bin/flatpak run com.github.hluk.copyq
+Keywords=copyq;copy-q;clipboard;

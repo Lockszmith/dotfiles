@@ -1,0 +1,29 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+if [ -d ~/.sz.shrc.d ]; then
+  script_source=("$(find ~/.sz.shrc.d -maxdepth 1 -type d -name "$(ps -p$$ -ho comm).pre")")
+  script_source+=("$(find ~/.sz.shrc.d -maxdepth 0 -type d)")
+  script_source+=("$(find ~/.sz.shrc.d -maxdepth 1 -type d -name "$(ps -p$$ -ho comm).post")")
+  for script_src in ${script_source[@]}; do
+    scripts=$(find $script_src -maxdepth 1 -type f -not -name "*.off" | sort)
+    for script_name in $scripts; do
+      if [ -r $script_name ]; then
+	[ -z ${DBG_SZSHRC} ] || echo "Sourcing $script_name..."
+        . $script_name
+      fi
+    done
+    unset scripts
+    unset script_name
+  done
+  unset script_source
+fi
+
+complete -C /usr/bin/terraform terraform

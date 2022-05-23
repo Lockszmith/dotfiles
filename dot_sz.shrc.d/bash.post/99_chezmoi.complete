@@ -1,0 +1,1 @@
+source <(chezmoi completion bash)

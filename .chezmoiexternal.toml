@@ -1,0 +1,10 @@
+["my/code/from_web/chemacs2"]
+  type          = "git-repo"
+  url           = "https://github.com/plexus/chemacs2.git"
+  refreshPeriod = "168h" # 7 days
+
+[".emacs.my/spacemacs/emacs.d"]
+  type          = "git-repo"
+  url           = "https://github.com/syl20bnr/spacemacs.git"
+  clone.args    = ["--depth=1","--branch=develop"]
+  refreshPeriod = "168h" # 7 days
