@@ -1,5 +1,11 @@
-alias sudo="sudo "
-alias nvim="nvim -p "
+alias sudo="/usr/bin/sudo "
+alias nvim="/usr/bin/nvim -p "
 alias vim="nvim "
 alias vi="nvim "
 
+alias ed="nvim "
+
+alias edshrc="ed ~/.sz.shrc.d ; exec $SHELL"
+alias cz="chezmoi "
+alias cz-refresh="chezmoi status | cut -d\  -f2 | grep '^\.sz\.shrc\.d' | xargs chezmoi forget --force; chezmoi add ~/.sz.shrc.d --recursive; chezmoi status; chezmoi git status"
+alias cz-commit="chezmoi git -- commit -a "
