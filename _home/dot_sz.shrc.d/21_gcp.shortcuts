@@ -1,0 +1,21 @@
+function gcp_project() {
+  gcloud config get-value core/project 2> /dev/null
+}
+
+function gcp_get_project_id() {
+  gcloud projects list \
+    --filter="$1" \
+    --format="value(project_id)" \
+    2> /dev/null
+}
+
+function gcp_get_project_number() {
+  gcloud projects list \
+    --filter="project_id:$1" \
+    --format='value(project_number)' \
+    2> /dev/null
+}
+
+function gcp_region() {
+  gcloud config get-value compute/region 2> /dev/null
+}
