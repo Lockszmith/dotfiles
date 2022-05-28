@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+function main() {
+if (! type curl >/dev/null 2>&1); then
+  echo '`curl` isn'\''t installed, please install curl first.'
+  return
+fi
+
+if (type chezmoi >/dev/null 2>&1); then
+  if [ -d ~/.local/share/chezmoi ] ; then
+    echo '`chezmoi` is already installed and initialized, this script should only be used for initializing'
+    return
+  fi
+fi
+sh -c "$(curl -fsLS chezmoi.io/get)" -- init --apply Lockszmith
+}
+main
