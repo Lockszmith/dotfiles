@@ -24,7 +24,7 @@ echo ""
 
 check-exist "Byobu" "/usr/bin/byobu-launch"
 check-exist "oh-my-posh"
-check-exist "~/.poshtheme.omp.json" "oh-my-posh config" "-r"
+check-exist "~/.poshtheme.omp.json" "~/.poshtheme.omp.json" "-r"
 check-exist "tmux"
 check-exist "git"
 check-exist "emacs"
