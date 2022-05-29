@@ -22,3 +22,11 @@ sh -c "$(curl -fsLS chezmoi.io/get)" -- init --apply Lockszmith
 ```
 sh -c "$(curl -fsLS chezmoi.io/get)" -- init --apply git@github.com:Lockszmith/dotfiles.git
 ```
+
+## Troubleshooting
+Run the [`sz-doctor.sh`](_home/bin/executable_sz-doctor.sh) shell script, it should be installed into the `~/bin` dir by chezmoi, if chezmoi fialed, you can still download it directly from the web buy running:
+
+```
+> curl -fsLS lksz.me/sz-doctor.sh | bash
+```
+

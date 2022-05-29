@@ -12,5 +12,9 @@ if (type chezmoi >/dev/null 2>&1); then
   fi
 fi
 sh -c "$(curl -fsLS chezmoi.io/get)" -- init --apply Lockszmith
+
+echo ''
+echo 'You should restart the shell (`exec $SHELL`) or re-login, and then run `sz-doctor.sh` to check'
+echo ''
 }
 main
