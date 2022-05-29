@@ -1,5 +1,0 @@
-if [[ -n "$(type -fP chezmoi)" ]]; then
-  CHEZMOI_OUT="$(chezmoi status || true)x"
-  [[ -n "$CHEZMOI_OUT" ]] && printf "\nChezmoi changes:\n" && echo "${CHEZMOI_OUT%?}"
-  unset CHEZMOI_OUT
-fi

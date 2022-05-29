@@ -1,0 +1,19 @@
+if [[ -n "$(type -fP chezmoi)" ]]; then
+  alias cz="chezmoi "
+  alias cz-refresh="chezmoi status | cut -d\  -f2 | grep '^\.sz\.shrc\.d' | xargs chezmoi forget --force; chezmoi add ~/.sz.shrc.d --recursive; chezmoi status; chezmoi git status"
+  alias cz-commit="chezmoi git -- commit -a "
+
+  function cz-set-ssh-github() {
+    chezmoi git -- remote set-url origin "$(chezmoi git -- remote get-url origin | sed 's|https://github.com/|git@github.com:|')"
+    chezmoi git -- remote get-url origin
+  }
+
+  function cz-set-https-github() {
+    chezmoi git -- remote set-url origin "$(chezmoi git -- remote get-url origin | sed 's|git@github.com:|https://github.com/|')"
+    chezmoi git -- remote get-url origin
+  }
+
+  CHEZMOI_OUT="$(chezmoi status || true)x"
+  [[ "x" != "$CHEZMOI_OUT" ]] && printf "\nChezmoi changes:\n" && echo "${CHEZMOI_OUT%?}"
+  unset CHEZMOI_OUT
+fi

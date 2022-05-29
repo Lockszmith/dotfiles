@@ -11,6 +11,3 @@ alias lessr="less --raw-control-chars "
 alias ed="nvim "
 
 alias sz-edshrc="ed ~/.sz.shrc.d ; exec $SHELL"
-alias cz="chezmoi "
-alias cz-refresh="chezmoi status | cut -d\  -f2 | grep '^\.sz\.shrc\.d' | xargs chezmoi forget --force; chezmoi add ~/.sz.shrc.d --recursive; chezmoi status; chezmoi git status"
-alias cz-commit="chezmoi git -- commit -a "

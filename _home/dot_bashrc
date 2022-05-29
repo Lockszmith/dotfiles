@@ -4,7 +4,7 @@
 
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
+    *i*) echo "Welcome $USER to $(hostname)";;
       *) return;;
 esac
 
