@@ -1,18 +1,25 @@
 #! /usr/bin/env bash
 
+function print-result() {
+  printf "%-30s: %-8s %s \n" "$1" "$2" "$3"
+}
 function check-exist() {
   _TEST_RESULT='Missing'
   _TEST_NAME=$1
   _TEST_PATH=${2:-$(type -fP $_TEST_NAME | head -1 2>/dev/null)}
   [[ -n "$_TEST_PATH" ]] && eval "[[ ${3:--x} ${_TEST_PATH// /\\ } ]]" && _TEST_RESULT='Found'
-  printf "%-30s: %-8s %s \n" "$_TEST_NAME" "$_TEST_RESULT" "${4}"
+  print-result "$_TEST_NAME" "$_TEST_RESULT" "${4}"
 }
 
 echo "Shell: $SHELL"
 echo ""
 
-echo "vi editor(s) found:"
-echo "$(type -fP nvim vim vi)"
+#_ALT_EDITOR=$( update-alternatives --get-selections | grep '^editor' | sed 's:^editor\W\+\w\+\W\+/:/:' )
+_ALT_EDITOR=$( update-alternatives --query editor | grep '^Value:' | cut -d: -f2 | sed 's: *\(.*\) *:\1:g' )
+print-result "System prefered editor" "$_ALT_EDITOR"
+( echo $_ALT_EDITOR | grep "nano$" >/dev/null ) && echo "Recommended to run: update-alternatives --set editor $(type -fP nvim vim.basic vim.tiny vi | head -1)"
+echo "editors found:"
+update-alternatives --query editor | grep Alternative: | cut -d: -f2
 echo ""
 
 check-exist "Byobu" "/usr/bin/byobu-launch"
