@@ -12,8 +12,4 @@ if [[ -n "$(type -fP chezmoi)" ]]; then
     chezmoi git -- remote set-url origin "$(chezmoi git -- remote get-url origin | sed 's|git@github.com:|https://github.com/|')"
     chezmoi git -- remote get-url origin
   }
-
-  CHEZMOI_OUT="$(chezmoi status || true)x"
-  [[ "x" != "$CHEZMOI_OUT" ]] && printf "\nChezmoi changes:\n" && echo "${CHEZMOI_OUT%?}"
-  unset CHEZMOI_OUT
 fi
