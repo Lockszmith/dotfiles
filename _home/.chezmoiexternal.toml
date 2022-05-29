@@ -20,16 +20,14 @@
 # url           = "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/CodeNewRoman.zip"
   url           = "https://github.com/ryanoasis/nerd-fonts/releases/download/2.2.0-RC/CodeNewRoman.zip"
   exact         = true
-# refreshPeriod = "168h" # 7 days
-  refreshPeriod = "10s"
+  refreshPeriod = "168h" # 7 days
 
 [".local/share/fonts/NF_FiraCode"]
   type          = "archive"
 # url           = "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip"
   url           = "https://github.com/ryanoasis/nerd-fonts/releases/download/2.2.0-RC/FiraCode.zip"
   exact         = true
-# refreshPeriod = "168h" # 7 days
-  refreshPeriod = "10s"
+  refreshPeriod = "168h" # 7 days
 
 [".local/bin/oh-my-posh"]
   type          = "file"
