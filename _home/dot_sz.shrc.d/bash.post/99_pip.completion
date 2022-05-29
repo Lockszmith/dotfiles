@@ -1,2 +1,2 @@
-source <(pip completion --bash)
+[[ -n $(type -fP pip) ]] && source <(pip completion --bash)
 

@@ -1,5 +1,4 @@
-if [ -z $_byobu_sourced ]; then
+if [[ -z "$_byobu_sourced" && -x /usr/bin/byobu-launch ]]; then
   _byobu_sourced=1 . /usr/bin/byobu-launch 2>/dev/null || true
-  exit
 fi
 

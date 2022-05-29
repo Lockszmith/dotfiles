@@ -1,3 +1,0 @@
-setxkbmap -option
-setxkbmap -option caps:escape
-setxkbmap -option caps:ctrl_modifier

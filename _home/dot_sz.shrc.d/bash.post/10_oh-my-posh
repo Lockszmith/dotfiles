@@ -1,1 +1,6 @@
-eval "$(oh-my-posh init bash --config ~/.poshtheme.omp.json)"
+if [[ -n "$(type -fP oh-my-posh)" ]]; then
+  OHMYPOSH_CONFIG=''
+  [[ -r ~/.poshtheme.omp.json ]] && OHMYPOSH_CONFIG="~/.poshtheme.omp.json"
+  eval "$(oh-my-posh init bash --config $OHMYPOSH_CONFIG)"
+  unset OHMYPOSH_CONFIG
+fi

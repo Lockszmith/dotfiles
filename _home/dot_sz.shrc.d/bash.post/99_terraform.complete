@@ -1,3 +1,4 @@
-if [ -r /usr/bin/terraform ]; then
-  complete -C /usr/bin/terraform terraform
+TERRAFORM_BIN=$(type -fP terraform | head -1)
+if [[ -n $TERRAFORM_BIN ]]; then
+  complete -C $TERRAFORM_BIN terraform
 fi

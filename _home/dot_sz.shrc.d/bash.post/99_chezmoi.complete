@@ -1,1 +1,1 @@
-source <(chezmoi completion bash)
+[[ -n "$BASH_COMPLETION_EXIST" && -n $(type -fP chezmoi) ]] && source <(chezmoi completion bash)

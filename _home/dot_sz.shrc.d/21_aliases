@@ -1,7 +1,10 @@
 alias sudo="/usr/bin/sudo "
-alias nvim="/usr/bin/nvim -p "
-alias vim="nvim "
-alias vi="nvim "
+PREFERED_VI=$(type -fP nvim vim | head -1)
+[[ -z "$PREFERED_VI" ]] && PREFERED_VI=$(type -fP vi | head -1) || alias vi_editor="$PREFERED_VI -p "
+[[ -z "$PREFERED_VI" ]] && alias vi_editor='eval $EDITOR '      || alias vi_editor="$PREFERED_VI "
+alias nvim="vi_editor "
+alias vim="vi_editor "
+alias vi="vi_editor "
 
 alias lessr="less --raw-control-chars "
 
