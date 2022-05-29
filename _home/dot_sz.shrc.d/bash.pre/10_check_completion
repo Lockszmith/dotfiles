@@ -1,1 +1,1 @@
-[[ -x /usr/share/bash-completion/bash_completion ]] && BASH_COMPLETION_EXIST=1
+[[ -r /usr/share/bash-completion/bash_completion ]] && BASH_COMPLETION_EXIST=1
