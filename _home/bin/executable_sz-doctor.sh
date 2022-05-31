@@ -22,6 +22,8 @@ echo "editors found:"
 update-alternatives --query editor | grep Alternative: | cut -d: -f2
 echo ""
 
+print-result 'Executable `apt`' $([[ -e $(type -fP apt) ]] && [[ -x $(type -fP apt | head -1) ]] && echo 'Found' || echo 'NOT found' )
+
 check-exist "Byobu" "/usr/bin/byobu-launch"
 check-exist "oh-my-posh"
 check-exist "~/.poshtheme.omp.json" "~/.poshtheme.omp.json" "-r"

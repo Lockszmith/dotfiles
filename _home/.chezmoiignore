@@ -1,1 +1,3 @@
 .local/share/fonts/**/.uuid
+.ssh/*
+~.ssh/authorized_keys.template
