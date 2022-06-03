@@ -174,11 +174,27 @@
           "type": "exit"
         },
         {
+          "background": "#4063D8",
+          "background_templates": [
+            "{{ if .Root }}lightRed{{ end }}"
+          ],
+          "foreground": "#d3d7cf",
+          "properties": {
+            "display_host": true
+          },
+          "invert_powerline": true,
+          "style": "powerline",
+          "powerline_symbol": "\ue0b2",
+          "template": "<{{ if .Root }}lightBlue{{ else }}green{{ end }}></>{{ .UserName }}{{ if .Root }}!{{ else }}@{{ end }}{{ .HostName }}<{{ if .Root }}lightBlue{{ else }}green{{ end }}></> \uf2bd ",
+          "trailing_diamond": "\ue0b0\u2500\u256e",
+          "type": "session"
+        },
+        {
           "background": "#d3d7cf",
           "foreground": "#000000",
           "invert_powerline": true,
           "style": "diamond",
-          "template": "{{ .CurrentDate | date .Format }} \uf017 ",
+          "template": " {{ .CurrentDate | date .Format }} \uf017",
           "trailing_diamond": "\ue0b0\u2500\u256e",
           "type": "time"
         }
