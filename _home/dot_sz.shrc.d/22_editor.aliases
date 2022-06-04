@@ -1,0 +1,21 @@
+if [[ -n "$(type -fP emacsclient)" && -n "$(type -fP emacs)" && -n "$(type -fP edit-with-spacemacs)" ]]; then
+  alias vi_editor='edit-with-spacemacs'
+else
+  PREFERED_VI=$(type -fP nvim vim | head -1)
+  if [[ -z "$PREFERED_VI" ]]; then
+    PREFERED_VI=$(type -fP vi | head -1)
+  
+    if [[ -z "$PREFERED_VI" ]]; then
+      alias vi_editor='eval $EDITOR '
+    else
+      alias vi_editor="$PREFERED_VI"
+    fi
+  else
+    alias vi_editor="$PREFERED_VI -p"
+  fi
+fi
+alias nvim="vi_editor"
+alias vim="vi_editor"
+alias vi="vi_editor"
+
+alias ed="vi_editor"

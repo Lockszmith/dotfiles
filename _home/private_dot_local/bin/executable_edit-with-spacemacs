@@ -1,0 +1,58 @@
+#!/bin/bash
+
+###
+### edit-with-spacemacs, ensures a daemon named spacemacs is working
+### if it's already running, the editor will open a new frame attached to it
+### if it's not, it will first launch the daemon
+###
+
+MY_EMACS_PROFILE=${CHEMACS_PROFILE:-spacemacs}
+MY_SILENT="/dev/null"
+MY_EMACS_CREATEFRAME="--create-frame"
+MY_EMACS_NO_WAIT="--no-wait"
+
+# MY_SILENT="/dev/tty"
+# MY_EMACS_NO_WAIT=""
+
+if [ "$DISPLAY" = "" ]; then
+  MY_EMACS_NO_WAIT=""
+fi
+
+# set | grep '^MY_EMACS' 1>&2
+
+function q_()  { printf  "'%s'\n"  "${@}"; }
+
+function myemacs_full() {
+
+  _cli="$(q_ "${@}")"
+  _cli="${_cli// /\\ }"
+  _cli=$(printf "$_cli")
+  # echo $_cli
+  _cli=$(printf "/usr/bin/emacsclient \ 
+    --socket-name=\"$MY_EMACS_PROFILE\" \
+    $MY_EMACS_CREATEFRAME \
+    $MY_EMACS_NO_WAIT \
+    --alternate-editor='sh -c \"( \
+        /usr/bin/emacs --with-profile '$MY_EMACS_PROFILE' --daemon \
+      ); echo ''Daemon started'' > $MY_SILENT; ( \
+        /usr/bin/emacsclient \
+        --socket-name='$MY_EMACS_PROFILE' \
+        $MY_EMACS_NO_WAIT \
+        --create-frame \
+        ${_cli//\'/\'\'} \
+      )\"' \
+    $_cli" \
+    )
+
+  # set -x
+  #echo $_cli
+  2>$MY_SILENT eval $_cli
+}
+
+# FRAMES was supposed to find existing frames, but it doesn't seem to work right now
+# Requires more research
+#
+# FRAMES=$( 2>/dev/null /usr/bin/emacsclient -n -e "(if (> (length (frame-list)) 1) 't)" | grep t )
+# echo "FRAMES: {$FRAMES}" 1>&2
+
+myemacs_full "${@}"

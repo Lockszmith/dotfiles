@@ -1,22 +1,5 @@
 alias sudo="/usr/bin/sudo "
-PREFERED_VI=$(type -fP nvim vim | head -1)
-if [[ -z "$PREFERED_VI" ]]; then
-  PREFERED_VI=$(type -fP vi | head -1)
-
-  if [[ -z "$PREFERED_VI" ]]; then
-    alias vi_editor='eval $EDITOR '
-  else
-    alias vi_editor="$PREFERED_VI "
-  fi
-else
-  alias vi_editor="$PREFERED_VI -p "
-fi
-alias nvim="vi_editor "
-alias vim="vi_editor "
-alias vi="vi_editor "
 
 alias lessr="less --raw-control-chars "
-
-alias ed="nvim "
 
 alias sz-edshrc="ed ~/.sz.shrc.d ; exec $SHELL"
