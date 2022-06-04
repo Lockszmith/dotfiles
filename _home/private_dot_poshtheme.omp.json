@@ -25,7 +25,7 @@
             "shell": "bash",
             "command": "systemctl is-system-running || true"
           },
-          "template": "{{ if contains \"running\" .Output }}{{ else }} {{ .Output }} {{ end }}"
+          "template": "{{ if not (contains \"running\" .Output) }} {{ .Output }} {{ end }}"
         },
         {
           "background": "#3465a4",
