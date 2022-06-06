@@ -1,4 +1,4 @@
-["my/code/from_web/chemacs2"]
+[".local/share/git-on-web/chemacs2"]
   type          = "git-repo"
   url           = "https://github.com/plexus/chemacs2.git"
   refreshPeriod = "168h" # 7 days
