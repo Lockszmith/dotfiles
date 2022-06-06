@@ -1,0 +1,59 @@
+#! /usr/bin/env bash
+
+MISSING_APT_PACKAGES=()
+SUGGESTED=()
+
+function print-result() {
+  printf "%-30s: %-8s %s \n" "$1" "$2" "$3"
+}
+function check-exist() {
+  _RETURN_EVAL='true'
+  _TEST_RESULT='Missing'
+  _TEST_NAME=$1
+  _TEST_PATH=${2:-$(type -fP $_TEST_NAME | head -1 2>/dev/null)}
+  [[ -n "$_TEST_PATH" ]] && eval "[[ ${3:--x} ${_TEST_PATH// /\\ } ]]" && _TEST_RESULT='Found' || _RETURN_EVAL='false'
+  eval $_RETURN_EVAL && _TEST_NOTE="${4}" || _TEST_NOTE="${5}"
+  print-result "$_TEST_NAME" "$_TEST_RESULT" "$_TEST_NOTE"
+  eval $_RETURN_EVAL
+}
+
+echo "Shell: $SHELL"
+echo ""
+
+#_ALT_EDITOR=$( update-alternatives --get-selections | grep '^editor' | sed 's:^editor\W\+\w\+\W\+/:/:' )
+_ALT_EDITOR=$( update-alternatives --query editor | grep '^Value:' | cut -d: -f2 | sed 's: *\(.*\) *:\1:g' )
+print-result "System prefered editor" "$_ALT_EDITOR"
+( echo $_ALT_EDITOR | grep "nano$" >/dev/null ) && echo "Recommended to run: update-alternatives --set editor $(type -fP nvim vim.basic vim.tiny vi | head -1)"
+echo "editors found:"
+update-alternatives --query editor | grep Alternative: | cut -d: -f2
+echo ""
+
+APT_OK=$([[ -e $(type -fP apt) ]] && [[ -x $(type -fP apt | head -1) ]] && echo '1')
+APT_OK=""
+print-result 'Executable `apt`' $([[ -n "$APT_OK" ]] && echo "Found" || echo "Missing" ) "$([[ -n "$APT_OK" ]] || printf 'repair by running:\n%-41sfix-apt.sh' '' )"
+
+check-exist "Byobu" "/usr/bin/byobu-launch" || MISSING_APT_PACKAGES+=('byobu')
+check-exist "oh-my-posh"
+check-exist "~/.poshtheme.omp.json" "~/.poshtheme.omp.json" "-r"
+check-exist "tmux"
+check-exist "git"
+check-exist "emacs"
+check-exist "terraform" '' '' ''       "$([[ -r /usr/share/keyrings/hashicorp.gpg ]] && MISSING_APT_PACKAGES+=('torraform') || echo \
+                                          'add apt repo by running:
+                                           curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp.gpg 
+                                           sudo apt-add-repository \
+                                             "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main"' \
+                                        )"
+check-exist "setxkbmap"
+check-exist "chezmoi"
+check-exist "gcloud"
+check-exist 'bash completion' '/usr/share/bash-completion/bash_completion' '-r'
+check-exist 'CodeNewRoman Nerd Font' '~/.local/share/fonts/NF_CodeNewRoman' '-d'
+check-exist 'FiraCode Nerd Font' '~/.local/share/fonts/NF_FiraCode' '-d'
+check-exist '~/bin' "~/bin" '-d' '(Optional)'
+check-exist '~/.local/bin' "~/.local/bin" '-d' '(Optional)'
+echo ""
+
+[[ -n $SUGGESTED ]] && echo 'You might want to run the following commands:' && printf "\n%s\n" "${SUGGESTED[*]}"
+
+[[ -n $MISSING_APT_PACKAGES ]] && printf "There are some missing APT packages, run the following command line to add them:\n\tsudo apt install ${MISSING_APT_PACKAGES[*]}\n\n"
