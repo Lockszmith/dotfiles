@@ -1,5 +1,0 @@
-if [[ -n "$(type -fP setxkbmap)" ]]; then 
-  setxkbmap -option
-  setxkbmap -option caps:escape
-  setxkbmap -option caps:ctrl_modifier
-fi

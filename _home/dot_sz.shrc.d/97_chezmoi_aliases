@@ -3,6 +3,15 @@ if [[ -n "$(type -fP chezmoi)" ]]; then
   alias cz-refresh="chezmoi status | cut -d\  -f2 | grep '^\.sz\.shrc\.d' | xargs chezmoi forget --force; chezmoi add ~/.sz.shrc.d --recursive; chezmoi status; chezmoi git status"
   alias cz-commit="chezmoi git -- commit -a "
 
+  function cz-remove-missing() {
+    pushd ~ > /dev/null
+    changes=$(chezmoi status | sed -n 's/^DA[ \t]\+//p')
+    for c in $changes; do
+      chezmoi rm $c
+    done
+    popd > /dev/null
+  }
+
   function cz-add-changes() {
     pushd ~ > /dev/null
     changes=$(chezmoi status | sed -n 's/^MM[ \t]\+//p')
