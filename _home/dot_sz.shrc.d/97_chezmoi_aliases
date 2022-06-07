@@ -1,5 +1,11 @@
 if [[ -n "$(type -fP chezmoi)" ]]; then
+  alias cdcz="cd $(chezmoi source-path)"
+  alias czcd="cdcz "
+  
   alias cz="chezmoi "
+
+  alias czs="chezmoi status "
+
   alias cz-refresh="chezmoi status | cut -d\  -f2 | grep '^\.sz\.shrc\.d' | xargs chezmoi forget --force; chezmoi add ~/.sz.shrc.d --recursive; chezmoi status; chezmoi git status"
   alias cz-commit="chezmoi git -- commit -a "
 
