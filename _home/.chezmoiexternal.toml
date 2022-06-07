@@ -3,7 +3,7 @@
   url           = "https://github.com/plexus/chemacs2.git"
   refreshPeriod = "168h" # 7 days
 
-[".emacs.my/spacemacs/emacs.d"]
+[".config/_my.emacs/spacemacs/emacs.d"]
   type          = "git-repo"
   url           = "https://github.com/syl20bnr/spacemacs.git"
   clone.args    = ["--depth=1","--branch=develop"]

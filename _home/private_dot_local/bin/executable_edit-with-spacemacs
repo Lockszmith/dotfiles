@@ -29,14 +29,14 @@ function myemacs_full() {
   _cli=$(printf "$_cli")
   # echo $_cli
   _cli=$(printf "/usr/bin/emacsclient \ 
-    --socket-name=\"$MY_EMACS_PROFILE\" \
+    --socket-name=$MY_EMACS_PROFILE \
     $MY_EMACS_CREATEFRAME \
     $MY_EMACS_NO_WAIT \
     --alternate-editor='sh -c \"( \
-        /usr/bin/emacs --with-profile '$MY_EMACS_PROFILE' --daemon \
+        /usr/bin/emacs --with-profile $MY_EMACS_PROFILE --daemon \
       ); echo ''Daemon started'' > $MY_SILENT; ( \
         /usr/bin/emacsclient \
-        --socket-name='$MY_EMACS_PROFILE' \
+        --socket-name=$MY_EMACS_PROFILE \
         $MY_EMACS_NO_WAIT \
         --create-frame \
         ${_cli//\'/\'\'} \

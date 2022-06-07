@@ -1,4 +1,8 @@
-if [[ -n "$(type -fP emacsclient)" && -n "$(type -fP emacs)" && -n "$(type -fP edit-with-spacemacs)" ]]; then
+if [[ -r "$HOME/.config/_my.emacs/spacemacs/emacs.d/init.el" \
+    && -n "$(type -fP emacsclient)" \
+    && -n "$(type -fP emacs)" \
+    && -n "$(type -fP edit-with-spacemacs)" \
+   ]]; then
   alias vi_editor='edit-with-spacemacs'
 else
   PREFERED_VI=$(type -fP nvim vim | head -1)

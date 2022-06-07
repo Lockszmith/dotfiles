@@ -1,21 +1,26 @@
 (("default"       . (
-    (user-emacs-directory . "~/.emacs.my/deafult/emacs.d")
+    (user-emacs-directory . "~/.config/_my.emacs/deafult/emacs.d")
     (server-name . "gnu")
  ))
  ("spacemacs"     . (
-    (user-emacs-directory . "~/.emacs.my/spacemacs/emacs.d")
+    (user-emacs-directory . "~/.config/_my.emacs/spacemacs/emacs.d")
     (server-name . "spacemacs")
-    (env . (("SPACEMACSDIR" . "~/.emacs.my/spacemacs/config.std")))
+    (env . (("SPACEMACSDIR" . "~/.config/_my.emacs/spacemacs/config.std")))
+ ))
+ ("smxmin" . (
+    (user-emacs-directory . "~/.config/_my.emacs/spacemacs/emacs.d")
+    (server-name . "spacemacs-min")
+    (env . (("SPACEMACSDIR" . "~/.config/_my.emacs/spacemacs/config.min")))
  ))
  ("spacemacs-min" . (
-    (user-emacs-directory . "~/.emacs.my/spacemacs/emacs.d")
+    (user-emacs-directory . "~/.config/_my.emacs/spacemacs/emacs.d")
     (server-name . "spacemacs-min")
-    (env . (("SPACEMACSDIR" . "~/.emacs.my/spacemacs/config.min")))
+    (env . (("SPACEMACSDIR" . "~/.config/_my.emacs/spacemacs/config.min")))
  ))
  ("doom"          . (
-    (user-emacs-directory . "~/.emacs.my/doom/emacs.d")
+    (user-emacs-directory . "~/.config/_my.emacs/doom/emacs.d")
     (server-name . "doom")
-    (env . (("DOOMDIR" . "~/.emacs.my/doom/config")))
+    (env . (("DOOMDIR" . "~/.config/_my.emacs/doom/config")))
  ))
 )
 
