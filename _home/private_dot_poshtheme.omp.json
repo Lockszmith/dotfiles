@@ -205,6 +205,21 @@
           "type": "session"
         },
         {
+          "background": "#81ff91",
+          "background_templates": [
+            "{{ if gt .SwapPercentUsed 90.0 }}red{{ else if gt .SwapPercentUsed 75.0 }}lightRed{{ end }}"
+          ],
+          "foreground": "#000000",
+          "foreground_templates": [
+            "{{ if gt .SwapPercentUsed 90.0 }}#d3d7cf{{ end }}"
+          ],
+          "invert_powerline": true,
+          "style": "powerline",
+          "powerline_symbol": "\ue0b2",
+          "template": "sw{{ printf \"%.0f%%\" .SwapPercentUsed }}",
+          "type": "sysinfo"
+        },
+        {
           "background": "#d3d7cf",
           "foreground": "#000000",
           "invert_powerline": true,
