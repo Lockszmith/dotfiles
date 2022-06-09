@@ -1,3 +1,16 @@
+PREFERED_VI=$(type -fP nvim vim | head -1)
+if [[ -z "$PREFERED_VI" ]]; then
+  PREFERED_VI=$(type -fP vi | head -1)
+
+  if [[ -z "$PREFERED_VI" ]]; then
+    alias my_vi='eval $EDITOR '
+  else
+    alias my_vi="$PREFERED_VI"
+  fi
+else
+  alias my_vi="$PREFERED_VI -p"
+fi
+
 if [[ -r "$HOME/.config/_my.emacs/spacemacs/emacs.d/init.el" \
     && -n "$(type -fP emacsclient)" \
     && -n "$(type -fP emacs)" \
@@ -5,22 +18,11 @@ if [[ -r "$HOME/.config/_my.emacs/spacemacs/emacs.d/init.el" \
    ]]; then
   alias my_editor='edit-with-spacemacs'
 else
-  PREFERED_VI=$(type -fP nvim vim | head -1)
-  if [[ -z "$PREFERED_VI" ]]; then
-    PREFERED_VI=$(type -fP vi | head -1)
-  
-    if [[ -z "$PREFERED_VI" ]]; then
-      alias my_editor='eval $EDITOR '
-    else
-      alias my_editor="$PREFERED_VI"
-    fi
-  else
-    alias my_editor="$PREFERED_VI -p"
-  fi
+  alias my_editor='my_vi'
 fi
-alias nvim="my_editor"
-alias vim="my_editor"
-alias vi="my_editor"
+alias nvim="my_vi"
+alias vim="my_vi"
+alias vi="my_vi"
 
 alias ed="my_editor"
 alias edit="my_editor"
