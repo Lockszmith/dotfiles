@@ -1,9 +1,9 @@
 #! /usr/bin/env bash
 
-# sudo mkdir -p /usr/share/keyrings 2>&1 > /dev/null
+sudo mkdir -p /usr/share/keyrings 2>&1 > /dev/null
 
-# sudo apt-get install --yes --no-install-recommends \
-#     curl gnupg software-properties-common apt-transport-https
+sudo apt-get install --yes --no-install-recommends \
+    curl gnupg software-properties-common apt-transport-https
 
 function add_repo() {
     REPO_FQDN=$1 #'download.docker.com'
