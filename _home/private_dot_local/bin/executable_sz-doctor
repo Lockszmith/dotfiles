@@ -88,6 +88,7 @@ check-exist "tmux"  || MISSING_APT_PACKAGES+=('tmux')
 check-exist "git"   || MISSING_APT_PACKAGES+=('git')
 check-exist "emacs" || MISSING_APT_PACKAGES+=('emacs')
 check-exist "monit" || MISSING_APT_PACKAGES+=('monit')
+check-exist "direnv" || MISSING_APT_PACKAGES+=('direnv')
 check-exist "terraform" '' '' ''       "$( \
     [[ -r /usr/share/keyrings/apt.releases.hashicorp.com.gpg ]] \
       && MISSING_APT_PACKAGES+=('terraform') \

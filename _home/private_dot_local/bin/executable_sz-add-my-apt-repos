@@ -1,41 +1,76 @@
 #! /usr/bin/env bash
 
+
+# Make sure the /usr/share/keyrings dir exists
 sudo mkdir -p /usr/share/keyrings 2>&1 > /dev/null
 
+# Make sure all of the basic required tools are installed for the code
+# below to work
 sudo apt-get install --yes --no-install-recommends \
     curl gnupg software-properties-common apt-transport-https
 
+# some utility variables, _YES is optionally '--yes'
+[[ ! -z "$1" && "$1" == '--yes' ]] && _YES='--yes'
+_OS=$(lsb_release -is | awk '{ print tolower($0) }')
+[[ $_OS == 'pop' ]] && _OS='ubuntu'
+_REL=$(lsb_release -rs) # Release
+_CNM=$(lsb_release -cs) # CodeName
+_ARC=$(dpkg --print-architecture) # Architecture
+
+# The function that does the _Heavy Lifting_.
+# see the code that follows for the parameter signature
 function add_repo() {
     REPO_FQDN=$1 #'download.docker.com'
     GPG_KEY_URL=${2:-https:\/\/$REPO_FQDN\/gpg}
     GPG_KEY_PATH=/usr/share/keyrings/$REPO_FQDN.gpg
-    REPO_ARCH=${3:-$(dpkg --print-architecture)}
+    REPO_ARCH=${3:-${_ARC}}
     [[ $REPO_ARCH == '-' ]] && REPO_ARCH='' || REPO_ARCH="arch=$REPO_ARCH"
     REPO_URL=${4:-https:\/\/$REPO_FQDN}
-    REPO_SUITE=${5:-$(lsb_release -cs)}
+    REPO_SUITE=${5:-$_CNM}
     REPO_CMP=${6:-main}
     
-    curl -fsSL $GPG_KEY_URL | sudo gpg --dearmor -o $GPG_KEY_PATH
+    curl -fsSL $GPG_KEY_URL | sudo gpg --dearmor -o $GPG_KEY_PATH $_YES
     echo "Key created: $GPG_KEY_PATH"
     echo "deb [$(echo "$REPO_ARCH signed-by=$GPG_KEY_PATH" | xargs )] $REPO_URL $REPO_SUITE $REPO_CMP" | \
                 sudo tee /etc/apt/sources.list.d/$REPO_FQDN.list > /dev/null
     echo "APT source list added: /etc/apt/sources.list.d/$REPO_FQDN.list"
 }
 
-#Long line - 189 characters long
-#add_repo  REPO_FQDN/Name               GPG_KEY_URL                                             REPO_ARCH  REPO_URL                                   REPO_SUITE  REPO_CMP # TBD: PIN_PRIORITY
-#defaults: <required>                  'https://$REPO_FQDN/gpg'              $(dpkg --print-architecture) 'https://$REPO_FQDN'                $(lsb_release -cs) 'main'    #      <optional>
-#         ---------------------------- ------------------------------------------------------- ---------- ------------------------------------------ ----------- ---------
-add_repo  'download.docker.com'        'https://download.docker.com/linux/ubuntu/gpg'          ''         'https://download.docker.com/linux/ubuntu' ''          'stable'
-add_repo  'deb.anydesk.com'            'https://keys.anydesk.com/repos/DEB-GPG-KEY'            '-'        'http://deb.anydesk.com/'                  'all'       ''
-add_repo  'packages.cloud.google.com'  'https://packages.cloud.google.com/apt/doc/apt-key.gpg' '-'        'https://packages.cloud.google.com/apt'    'cloud-sdk' ''
-add_repo  'packages.microsoft.com'     'https://packages.microsoft.com/keys/microsoft.asc'     ''         'http://packages.microsoft.com/repos/code' 'stable'    ''
-add_repo  'apt.releases.hashicorp.com' 'https://apt.releases.hashicorp.com/gpg'                ''         'https://apt.releases.hashicorp.com'       ''          ''
+#Long line - 197 characters long
+#add_repo  REPO_FQDN/Name                GPG_KEY_URL                                             REPO_ARCH  REPO_URL                                         REPO_SUITE  REPO_CMP # TBD: PIN_PRIORITY
+#defaults: <required>                   'https://$REPO_FQDN/gpg'                                 $_ARC     'https://$REPO_FQDN'                              $_CNM      'main'    #      <optional>
+#         ----------------------------  ------------------------------------------------------- ---------- ------------------------------------------------ ----------- ---------
+# for: docker-ce docker-ce-cli containerd.io docker-compose-plugin
+# Also don't forget:
+#   remove: docker docker-engine docker.io containerd runc 
+#   possibly remove docker-compose and install: https://github.com/docker/compose-switch
+add_repo  'download.docker.com'         "https://download.docker.com/linux/$_OS/gpg"            ''         "https://download.docker.com/linux/$_OS"         ''          'stable'
+# for: anydesk
+add_repo  'deb.anydesk.com'             'https://keys.anydesk.com/repos/DEB-GPG-KEY'            '-'        'http://deb.anydesk.com/'                        'all'       ''
+# for: google-cloud-cli
+add_repo  'packages.cloud.google.com'   'https://packages.cloud.google.com/apt/doc/apt-key.gpg' '-'        'https://packages.cloud.google.com/apt'          'cloud-sdk' ''
+# for: code (optionally: powershell dotnet-*)
+add_repo  'packages.microsoft.com'      'https://packages.microsoft.com/keys/microsoft.asc'     ''         "https://packages.microsoft.com/$_OS/$_REL/prod" ''          ''
+# for: microsoft-edge-stable
+add_repo  'packages.microsoft.com-edge' 'https://packages.microsoft.com/keys/microsoft.asc'     ''         'http://packages.microsoft.com/repos/edge'       'stable'    ''
+# for: terraform
+add_repo  'apt.releases.hashicorp.com'  'https://apt.releases.hashicorp.com/gpg'                ''         'https://apt.releases.hashicorp.com'             ''          ''
 
-sudo apt-add-repository --no-update "deb [arch=amd64] http://http.us.debian.org/debian sid main non-free contrib"
+# I really LOVE xscreensavers, but it's been stuck in limbo on the
+# `stable` repos, so I install it from the `unstable`, aka `sid`, suite.
+# To do that safely, I make sure the repo is pinned to a lower priority.
+# I do this BEFORE I add the repo.
+
 # # Debian sid (unstable) as low-priority option
 (echo 'Package: *'; echo 'Pin: release a=unstable'; echo 'Pin-Priority: 200') | sudo tee /etc/apt/preferences.d/unstable > /dev/null
 # # pin xscreensaver to unstable
 (echo 'Package: xscreenaver*'; echo 'Pin: release a=unstable'; echo 'Pin-Priority: 2000') | sudo tee /etc/apt/preferences.d/xscreensaver > /dev/null
- 
+
+# for: xscreensaver xscreensaver-data xscreensaver-data-extra
+#      xscreensaver-screensaver-bsod xscreensaver-screensaver-webcollage
+# Add the unstable/sid repo - THIS IS DANGEROUS without the pinning via
+# /etc/apt/preferences.d files created by the code above.
+sudo apt-add-repository $_YES --no-update "deb [arch=amd64] http://http.us.debian.org/debian sid main non-free contrib"
+
+# Finally, run `apt update` to check that everything completed successfully
 sudo apt update
