@@ -1,4 +1,4 @@
-if [[ -n "$(type -fP chezmoi)" ]]; then
+if [[ -n "$(which-command chezmoi)" ]]; then
   alias cdcz="cd $(chezmoi source-path)"
   alias czcd="cdcz "
   

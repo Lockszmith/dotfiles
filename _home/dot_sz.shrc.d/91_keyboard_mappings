@@ -1,4 +1,4 @@
-if [[ -n "$(type -fP setxkbmap)" && -n "$DISPLAY" ]]; then
+if [[ -n "$(which-command setxkbmap)" && -n "$DISPLAY" ]]; then
   setxkbmap -option
   setxkbmap -option caps:escape
   setxkbmap -option caps:ctrl_modifier

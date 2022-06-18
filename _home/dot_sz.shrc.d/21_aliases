@@ -1,5 +1,10 @@
 alias sudo="/usr/bin/sudo "
 
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
 alias lessr="less --raw-control-chars "
 
 alias sz-edshrc="ed ~/.sz.shrc.d ; exec $SHELL"
