@@ -1,2 +1,2 @@
-alias which_command="type -fP "
+alias which-command="type -fP "
 
