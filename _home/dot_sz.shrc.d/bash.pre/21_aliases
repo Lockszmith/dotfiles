@@ -1,0 +1,2 @@
+alias which_command="type -fP "
+
