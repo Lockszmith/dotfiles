@@ -49,7 +49,7 @@
           "foreground": "#000000",
           "leading_diamond": "\u256d\u2500\ue0b2",
           "style": "diamond",
-          "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}}",
+          "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
           "type": "os"
         },
         {
@@ -75,13 +75,17 @@
             "home_icon": "\ufd24",
 	    "mixed_threshold": 3,
             "style": "unique",
+	    "folder_separator_icon": "\ue0b5",
+            "folder_separator_template": "",
             "mapped_locations": {
-	      "/": "\ue299/",
-	      "~/_pqb": "\ufab4",
-	      "~/_pqb/code": "\ufab4\ue796",
-	      "~/_pqb/code/slurm/moe-access": "\ue3bf\uf2c2",
+              "/": "\ue299/",     
+              "/srv": "\uf98a",    
+              "/srv/containeriszed/docker-compose": "\uf308",                   
+              "~/_pqb": "\ufab4",                                       
+              "~/_pqb/code": "\ufab4\ue796",       
+              "~/_pqb/code/slurm/moe-access": "\ue3bf\uf2c2",
               "~/_pqb/code/slurm": "\uf1b0",
-	      "~/_pqb/code/slurm/pqb-terraform": "\uf1b0\ufa08"
+              "~/_pqb/code/slurm/pqb-terraform": "\uf1b0\ufa08"
             }
           },
           "style": "powerline",
@@ -253,7 +257,7 @@
           "foreground": "#000000",
           "invert_powerline": true,
           "style": "diamond",
-          "template": " {{ .CurrentDate | date .Format }} \uf017",
+          "template": " {{ .CurrentDate | date .Format }} \uf017 ",
           "trailing_diamond": "\ue0b0\u2500\u256e",
           "type": "time"
         }
