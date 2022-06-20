@@ -68,6 +68,18 @@ function check-exist() {
   eval $_RETURN_EVAL
 }
 
+#### Output starts here
+
+printf "%-20s %-44s %-20s\n" "Model" "CPU" "BIOS Firmware"
+printf "%-20s %-44s %-20s\n" "$(
+  sudo dmidecode -s system-family
+  )" "$(sudo dmidecode -s processor-version
+  )" "$(sudo dmidecode -s bios-version)"
+printf "  Product Name: %-49s S/N: %s\n" "$(
+  sudo dmidecode -s system-product-name
+  )" "$(sudo dmidecode -s system-serial-number)"
+echo ''
+
 echo "Shell: $SHELL"
 echo ''
 
