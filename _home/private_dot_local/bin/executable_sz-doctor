@@ -6,6 +6,7 @@ SUGGESTED=()
 
 APT_OK=$([[ -e $(type -fP apt) ]] && [[ -x $(type -fP apt | head -1) ]] && echo 'true' || echo 'false')
 
+# TODO: Implement a test for specific Package Sources per package check
 PACKAGE_SOURCES=$( \
   grep -h ^deb /etc/apt/sources.list /etc/apt/sources.list.d/* \
   | sed 's/\[.*\] //; s/^deb //' \
@@ -71,45 +72,50 @@ function check-exist() {
 #### Output starts here
 PROD_NAME=$( sudo dmidecode --type 200 2> /dev/null | tail +5 | tail -2 | head -1 | awk '{print $1}')
 
-printf "%-15s %-20s %-44s %-20s\n" "Manufacturer" "Model family" "CPU" "BIOS Firmware"
-printf "%-15s %-20s %-44s %-20s\n" "$(
+MACHINE_INFO_FORMAT='%-14s %-19s %-13s %-11s %s\n'
+MACHINE_INFO_FIELDS=("Manufacturer" "Model family" "Model/MTM" "S/N" "BIOS Firmware")
+printf "$MACHINE_INFO_FORMAT" "${MACHINE_INFO_FIELDS[@]}"
+printf "$MACHINE_INFO_FORMAT" "$(
     sudo dmidecode -s system-manufacturer
   )" "$(sudo dmidecode -s system-family
-  )" "$(sudo dmidecode -s processor-version
-  )" "$(sudo dmidecode -s bios-version)"
-printf "  Model ID (or MTM): %-44s S/N: %s\n" "${PROD_NAME:-$(
+  )" "${PROD_NAME:-$(
     sudo dmidecode -s system-product-name
-  )}" "$(sudo dmidecode -s system-serial-number)"
+  )}" "$(sudo dmidecode -s system-serial-number
+  )" "$(sudo dmidecode -s bios-version)"
+printf "  CPU: %s\n" "$(
+    sudo dmidecode -s processor-version
+  )"
 echo ''
 
-echo "Shell: $SHELL"
+echo "Shell: $SHELL (availabe: $(echo $(cat /etc/shells | grep -v 'shells:' | sed "s/^\(.*\/\)*//" | sort -u)))"
 echo ''
 
 #_ALT_EDITOR=$( update-alternatives --get-selections | grep '^editor' | sed 's:^editor\W\+\w\+\W\+/:/:' )
 _ALT_EDITOR=$( update-alternatives --query editor | grep '^Value:' | cut -d: -f2 | sed 's: *\(.*\) *:\1:g' )
-print-result "System prefered editor" "$_ALT_EDITOR"
+print-result "System prefered editor" "$_ALT_EDITOR" "(Available: $(echo $(update-alternatives --query editor | grep Alternative: | cut -d: -f2 | sed 's/^\(.*\/\)//')))"
 ( echo $_ALT_EDITOR | grep "nano$" >/dev/null ) && echo "Recommended to run: update-alternatives --set editor $(type -fP nvim vim.basic vim.tiny vi | head -1)"
-echo "editors found:"
-update-alternatives --query editor | grep Alternative: | cut -d: -f2
 echo ''
 
 print-result 'Executable `apt`' $(test-print $APT_OK "Found" "Missing") "$(test-print $APT_OK '' "$(printf 'repair by running:\n%-41sfix-apt.sh')" )"
 echo ''
-check-exist "Byobu" "/usr/bin/byobu-launch" || MISSING_APT_PACKAGES+=('byobu')
-check-exist "oh-my-posh"
-check-exist "~/.poshtheme.omp.json" "~/.poshtheme.omp.json" "-r"
-check-exist "tmux"  || MISSING_APT_PACKAGES+=('tmux')
-check-exist "git"   || MISSING_APT_PACKAGES+=('git')
-check-exist "emacs" || MISSING_APT_PACKAGES+=('emacs')
-check-exist "monit" || MISSING_APT_PACKAGES+=('monit')
-check-exist "direnv" || MISSING_APT_PACKAGES+=('direnv')
-check-exist "terraform" '' '' ''       "$( \
+check-exist 'Byobu'     '/usr/bin/byobu-launch' || MISSING_APT_PACKAGES+=('byobu')
+check-exist 'oh-my-posh'
+check-exist '~/.poshtheme.omp.json' "~/.poshtheme.omp.json" "-r"
+check-exist 'tmux'  || MISSING_APT_PACKAGES+=('tmux')
+check-exist 'git'   || MISSING_APT_PACKAGES+=('git')
+check-exist 'emacs' || MISSING_APT_PACKAGES+=('emacs')
+check-exist 'monit' || MISSING_APT_PACKAGES+=('monit')
+check-exist 'direnv' || MISSING_APT_PACKAGES+=('direnv')
+check-exist 'terraform' '' '' ''       "$( \
     [[ -r /usr/share/keyrings/apt.releases.hashicorp.com.gpg ]] \
       && MISSING_APT_PACKAGES+=('terraform') \
-      || echo                             'fix missing repos (See SUGGESTED below)' \
+      || echo                           'fix missing repos (See SUGGESTED below)' \
       )" \
-      || SUGGESTED+=( 'sz-add-my-apt-repos' '# followed by:' 'sudo apt install terraform', '' )
-check-exist "setxkbmap" || MISSING_APT_PACKAGES+=('setxkbmap')
+  || SUGGESTED+=(
+      'sz-add-my-apt-repos' '# followed by:' 'sudo apt install terraform', ''
+  )
+check-exist "setxkbmap" '' '' '(Optional)' \
+  || MISSING_APT_PACKAGES+=('setxkbmap')
 check-exist "chezmoi"   '' '' ''        'wget -O- chezmoi.io/get | bash # or
                                          # wget -O- lksz.me/dotfiles | bash'
 check-exist "gcloud"    '' '' ''       "$( \
@@ -119,11 +125,11 @@ check-exist "gcloud"    '' '' ''       "$( \
       )" \
       || SUGGESTED+=( 'sz-add-my-apt-repos' '# followed by:' 'sudo apt install gcloud', '' )
 
-check-exist 'bash completion' '/usr/share/bash-completion/bash_completion' '-r'
-check-exist 'CodeNewRoman Nerd Font' '~/.local/share/fonts/NF_CodeNewRoman' '-d'
-check-exist 'FiraCode Nerd Font' '~/.local/share/fonts/NF_FiraCode' '-d'
-check-exist '~/bin' "~/bin" '-d' '(Optional)'
-check-exist '~/.local/bin' "~/.local/bin" '-d' '(Optional)'
+check-exist 'bash completion'        '/usr/share/bash-completion/bash_completion' '-r'
+check-exist 'CodeNewRoman Nerd Font' '~/.local/share/fonts/NF_CodeNewRoman'       '-d'
+check-exist 'FiraCode Nerd Font'     '~/.local/share/fonts/NF_FiraCode'           '-d'
+check-exist '~/bin'                  "~/bin"                                      '-d' '(Optional)'
+check-exist '~/.local/bin'           "~/.local/bin"                               '-d' '(Optional)'
 echo ""
 
 [[ -n $SUGGESTED ]] && echo 'You might want to run the following commands:' && printf "  %s\n" "${SUGGESTED[@]}"
