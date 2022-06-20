@@ -12,7 +12,7 @@ if [ -d ~/.sz.shrc.d ]; then
   script_source+=("$(find ~/.sz.shrc.d -maxdepth 1 -type d -name "$(ps -p$$ -ho comm).post")")
   [ -z ${DBG_SZSHRC} ] || echo "Working with (${script_source[@]})..."
   for script_src in ${script_source[@]}; do
-    scripts=($(find $script_src -maxdepth 1 -type f -not -name "*.off" -not -name "*.swp" | sort))
+    scripts=($(find $script_src -maxdepth 1 -type f -not -name "*~" -not -name "*.off" -not -name "*.swp" | sort))
     #[ -z ${DBG_SZSHRC} ] || echo "Within $script_src, will review (${scripts[@]})..."
     for script_name in ${scripts[@]}; do
       [ -z ${DBG_SZSHRC} ] || echo "Checking $script_name..."
