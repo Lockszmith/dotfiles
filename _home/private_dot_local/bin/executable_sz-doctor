@@ -69,15 +69,17 @@ function check-exist() {
 }
 
 #### Output starts here
+PROD_NAME=$( sudo dmidecode --type 200 2> /dev/null | tail +5 | tail -2 | head -1 | awk '{print $1}')
 
-printf "%-20s %-44s %-20s\n" "Model" "CPU" "BIOS Firmware"
-printf "%-20s %-44s %-20s\n" "$(
-  sudo dmidecode -s system-family
+printf "%-15s %-20s %-44s %-20s\n" "Manufacturer" "Model family" "CPU" "BIOS Firmware"
+printf "%-15s %-20s %-44s %-20s\n" "$(
+    sudo dmidecode -s system-manufacturer
+  )" "$(sudo dmidecode -s system-family
   )" "$(sudo dmidecode -s processor-version
   )" "$(sudo dmidecode -s bios-version)"
-printf "  Product Name: %-49s S/N: %s\n" "$(
-  sudo dmidecode -s system-product-name
-  )" "$(sudo dmidecode -s system-serial-number)"
+printf "  Model ID (or MTM): %-44s S/N: %s\n" "${PROD_NAME:-$(
+    sudo dmidecode -s system-product-name
+  )}" "$(sudo dmidecode -s system-serial-number)"
 echo ''
 
 echo "Shell: $SHELL"
