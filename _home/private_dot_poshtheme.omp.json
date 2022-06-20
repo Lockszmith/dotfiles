@@ -15,7 +15,7 @@
           ],
           "foreground": "#000000",
           "style": "diamond",
-          "leading_diamond": "  \ue0b2",
+          "leading_diamond": "\ue0c7\u2593",
           "properties": {
             "branch_icon": "\uf126 ",
             "fetch_stash_count": true,
@@ -47,8 +47,8 @@
         {
           "background": "#d3d7cf",
           "foreground": "#000000",
-          "leading_diamond": "\u256d\u2500\ue0b2",
           "style": "diamond",
+          "leading_diamond": "\ue0c7\u2593",
           "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
           "type": "os"
         },
@@ -258,7 +258,7 @@
           "invert_powerline": true,
           "style": "diamond",
           "template": " {{ .CurrentDate | date .Format }} \uf017 ",
-          "trailing_diamond": "\ue0b0\u2500\u256e",
+          "trailing_diamond": "\u2593\ue0c6",
           "type": "time"
         }
       ],
@@ -269,24 +269,29 @@
       "newline": true,
       "segments": [
         {
-          "foreground": "#d3d7cf",
-          "style": "plain",
-          "template": "\u2570\u2500",
-          "type": "text"
+          "type": "shell",
+          "style": "diamond",
+          "leading_diamond": "\ue0c7",
+          "trailing_diamond": "\uE0B0",
+	  "template": "{{ .Name }}",
+          "foreground": "#ffffff",
+          "background": "#000000",
+          "background_templates": [
+            "{{ if contains \"z\ue7a2\" .Name }}#29315a{{ end }}",
+            "{{ if contains \"b\ue7a2\" .Name }}#424242{{ end }}",
+            "{{ if contains \"\uf489\" .Name }}#0037da{{ end }}"
+          ],
+          "properties": {
+            "mapped_shell_names": {
+              "powershell": " \uf489",
+              "pwsh": " \uf489",
+	      "bash": "b\ue7a2",
+	      "zsh": "z\ue7a2"
+            }
+          }
         }
       ],
       "type": "prompt"
-    },
-    {
-      "segments": [
-        {
-          "foreground": "#d3d7cf",
-          "style": "plain",
-          "template": "\u2500\u256f",
-          "type": "text"
-        }
-      ],
-      "type": "rprompt"
     }
   ],
   "console_title_template": "{{ .Shell }} in {{ .Folder }}",
