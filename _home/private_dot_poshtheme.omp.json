@@ -74,7 +74,7 @@
           "properties": {
             "home_icon": "\ufd24",
 	    "mixed_threshold": 3,
-            "style": "unique",
+            "style": "agnoster_full",
 	    "folder_separator_icon": "\ue0b5",
             "folder_separator_template": "",
             "mapped_locations": {
