@@ -1,0 +1,20 @@
+if [[ -x "/mnt/szmedia/_apps.data/_scripts/truetool/truetool.sh" ]]; then
+  function truetool() {
+    pushd /mnt/szmedia/_apps.data/_scripts/truetool > /dev/null
+    sudo ./truetool.sh "${@}"
+    popd > /dev/null
+  }
+
+  function truedcx() {
+    docker exec -it $(docker ps --filter "name=$1" -q) $2
+  }
+  function true-docker-id() {
+    docker ps --filter "name=$1" -q
+  }
+  function true-hostname() {
+    local ID=$(true-docker-id $1)
+    local autoHostname=$(docker inspect  --format="{{ .Config.Hostname }}" $ID)
+    local contIP=$(docker exec $ID cat /etc/hosts | grep $autoHostname | awk '{print $1}')
+    docker exec $ID nslookup $contIP | tail +4 | sed 's/^[0-9]\+.*name = [-0-9]\+\.//'
+  }
+fi
