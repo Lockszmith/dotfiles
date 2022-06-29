@@ -10,3 +10,7 @@ alias lessr="less --raw-control-chars "
 alias sz-edshrc="ed ~/.sz.shrc.d ; exec $SHELL"
 
 [[ -z "$(env inkscape 2> /dev/null)" && -n "$(flatpak info org.inkscape.Inkscape 2> /dev/null)" ]] && alias inkscape="flatpak run org.inkscape.Inkscape "
+
+function clip() {
+  xclip -i -sel clipboard
+}
