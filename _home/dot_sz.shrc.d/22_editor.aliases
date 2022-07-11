@@ -16,8 +16,10 @@ if [[ -r "$HOME/.config/_my.emacs/spacemacs/emacs.d/init.el" \
     && -n "$(which-command emacs)" \
     && -n "$(which-command edit-with-spacemacs)" \
    ]]; then
-  alias my_editor='edit-with-spacemacs'
+   EDITOR=$(which-command edit-with-spacemacs | head -1)
+  alias my_editor="$EDITOR "
 else
+  EDITOR="$PREFERRED_VI"
   alias my_editor='my_vi'
 fi
 alias nvim="my_vi"

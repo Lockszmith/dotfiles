@@ -1,0 +1,84 @@
+TERRAFORM_BIN=$(which-command terraform | head -1)
+if [[ -x $TERRAFORM_BIN ]]; then
+    function tfcontext() {
+        [[ -n $(find $PWD -name '*.tf') ]] || return -1
+        [[ -d _logs ]] || mkdir _logs
+        TF_VAR_FILE_NAME=${TF_VAR_FILE_CLI-:$(basename $PWD).tfvars}
+        [[ -r $TF_VAR_FILE_NAME ]] || unset TF_VAR_FILE_NAME
+        TF_VAR_FILE_CLI=${TF_VAR_FILE_CLI-:-var-file='$TF_VAR_FILE_NAME'}
+
+        basename $PWD
+    }
+
+    function _tfsedFullStop() {
+        sed --unbuffered '/^===FULLSTOP===$/q' | sed --unbuffered '/^===FULLSTOP===$/d'
+    }
+
+    function tf() {
+        [[ -z "$TF_LOG_TS" ]] && _tfSetLogTS
+        local NAME=$1
+        [[ "${@}" =~ "-destroy" ]] && NAME="$1-destroy"
+
+        echo "===_logs/0_$NAME.log===" > _logs/0_0_lastrun.log
+        [[ -z "$SZ_DEBUG" ]] || echo "Executing: terraform ${@}"
+        {
+        terraform "${@}" 2>&1 \
+        | tee _logs/${TF_LOG_TS}_$NAME.log \
+        | awk 'BEGIN {p=1}; /<<\W*EOT/ {print; p=0}; /^\W*EOT/ {p=1}; p; fflush();' \
+        | tee --append _logs/0_0_lastrun.log \
+        >> _logs/0_$NAME.log
+
+        echo "===FULLSTOP===" >> _logs/0_0_lastrun.log
+        } &
+
+        _tfless _logs/0_0_lastrun.log
+    }
+
+    function tfp() {
+        [[ -z "$SZ_DEBUG" ]] || echo "DEBUG: tfplan ${@}"
+        local _TF_TARGET=""
+        [[ ${#TF_TARGET} -gt 0 ]] && _TF_TARGET="$(printf -- '--target=%s ' ${TF_TARGET[@]})"
+        [[ "${@}" =~ "-destroy" ]] && [[ ${#TF_DESTROY_TARGET} -gt 0 ]] && _TF_TARGET="$(printf -- '--target=%s ' ${TF_DESTROY_TARGET[@]})"
+
+        tf plan ${_TF_TARGET} "${@}"
+    }
+
+    function _tfless() {
+        local _TF_LOG_FILE=${1-_logs/0_0_lastrun.log}
+        [[ -z "$SZ_DEBUG" ]] || echo "_tfless: ${@} | LESS_NO_WAIT = '${LESS_NO_WAIT}'"
+        [[ -n "$1" ]] && {
+            trap : INT;
+            tail -f $_TF_LOG_FILE | _tfsedFullStop;
+        } \
+        || { [[ -z "${LESS_NO_WAIT}" ]] \
+            && { less \
+                --no-init \
+                --raw-control-chars \
+                --line-numbers \
+                --quiet \
+                --hilite-unread \
+                --incsearch \
+                --ignore-case \
+                --force \
+                "${@:2}" -- \
+                "$_TF_LOG_FILE"
+                #\
+                #'+G?([^\w\W][\[0-9m+])Plan:' \
+                #'+3k'
+            }
+        }
+    }
+
+    function _tfSetLogTS() {
+        export TF_LOG_TS=$(date -d "today" +"%Y%m%d%H%M%S")
+    }
+
+    function tfinit() {
+        return 0
+    }
+
+    function tfplan() {
+        return 0
+    }
+fi
+

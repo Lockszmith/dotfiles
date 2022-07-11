@@ -1,0 +1,5 @@
+if [[ -n "$(which-command tmux)" ]]; then
+  function clip-tmux() {
+    tmux save-buffer -a - | clip
+  }
+fi
