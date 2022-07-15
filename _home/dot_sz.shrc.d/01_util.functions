@@ -1,0 +1,28 @@
+error() {
+  (>&2 printf '\E[31mERROR:\E[0m %s\n' "$@" )
+}
+
+require_root() {
+  if [[ $EUID -ne 0 ]]; then
+    error "This script should only be run using sudo or as the root user"
+    exit 1
+  fi
+}
+
+function setacl() {
+    if [[ $# -lt 4 ]]; then
+        error "setacl missing arguments, called with '$1' ${@:2}"
+	return 1
+    fi
+    local Options=${1}
+    local Ownership=${2}
+    local Permissions=${3}
+
+    [[ -n "${SZ_DEBUG}" ]] \
+        && echo "chown $Options $Ownership \"${@:4}\""
+    chown $Options $Ownership "${@:4}"
+    [[ -n "${SZ_DEBUG}" ]] \
+        && echo "chmod $Options $Permissions \"${@:4}\""
+    chmod $Options $Permissions "${@:4}"
+}
+
