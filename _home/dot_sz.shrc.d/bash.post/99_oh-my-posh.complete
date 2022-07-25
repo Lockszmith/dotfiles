@@ -1,1 +1,1 @@
-[[ -n "$(type -fP gcloud)" ]] && source <(oh-my-posh completion bash)
+[[ -n "$(which-command oh-my-posh)" ]] && source <(oh-my-posh completion bash)

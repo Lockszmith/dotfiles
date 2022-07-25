@@ -1,3 +1,4 @@
+{{ if eq .chezmoi.hostname "pqb-laptop" }}
 [".local/share/git-on-web/chemacs2"]
   type          = "git-repo"
   url           = "https://github.com/plexus/chemacs2.git"
@@ -14,6 +15,7 @@
   url           = "https://github.com/doomemacs/doomemacs"
   clone.args    = ["--depth=1","--branch=develop","--single-branch"]
   refreshPeriod = "168h" # 7 days
+{{ end }}
 
 # ["my/code/from_web/nerd-fonts"]
 #   type          = "git-repo"

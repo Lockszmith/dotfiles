@@ -1,0 +1,4 @@
+if [[ -n "$(type -fP direnv)" ]]; then
+  source <( direnv hook bash )
+  source <( direnv stdlib )
+fi

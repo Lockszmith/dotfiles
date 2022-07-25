@@ -14,6 +14,40 @@ if [[ -x $TERRAFORM_BIN ]]; then
         sed --unbuffered '/^===FULLSTOP===$/q' | sed --unbuffered '/^===FULLSTOP===$/d'
     }
 
+    function _tfless() {
+        local _TF_LOG_FILE=${1-_logs/0_0_lastrun.log}
+        [[ "$1" == "-" ]] && _TF_LOG_FILE='_logs/0_0_lastrun.log'
+        [[ -z "$SZ_DEBUG" ]] || echo "_tfless: ${@} | LESS_NO_WAIT = '${LESS_NO_WAIT}'"
+        [[ "$1" == "-" ]] && {
+            [[ -z "$SZ_DEBUG" ]] || echo "tailing..."
+            trap : INT;
+            tail -f $_TF_LOG_FILE | _tfsedFullStop;
+        } \
+            || { [[ -z "${LESS_NO_WAIT}" ]] \
+                     && {
+                     [[ -z "$SZ_DEBUG" ]] || echo "Invoking less..."
+                     less \
+                              --no-init \
+                              --raw-control-chars \
+                              --line-numbers \
+                              --quiet \
+                              --hilite-unread \
+                              --incsearch \
+                              --ignore-case \
+                              --force \
+                              "${@:2}" -- \
+                              "$_TF_LOG_FILE"
+                          #\
+                              #'+G?([^\w\W][\[0-9m+])Plan:' \
+                              #'+3k'
+                 }
+        }
+    }
+
+    function _tfSetLogTS() {
+        export TF_LOG_TS=$(date -d "today" +"%Y%m%d%H%M%S")
+    }
+
     function tf() {
         [[ -z "$TF_LOG_TS" ]] && _tfSetLogTS
         local NAME=$1
@@ -31,10 +65,10 @@ if [[ -x $TERRAFORM_BIN ]]; then
         echo "===FULLSTOP===" >> _logs/0_0_lastrun.log
         } &
 
-        _tfless _logs/0_0_lastrun.log
+        _tfless -
     }
 
-    function tfp() {
+    function tf-plan() {
         [[ -z "$SZ_DEBUG" ]] || echo "DEBUG: tfplan ${@}"
         local _TF_TARGET=""
         [[ ${#TF_TARGET} -gt 0 ]] && _TF_TARGET="$(printf -- '--target=%s ' ${TF_TARGET[@]})"
@@ -43,42 +77,36 @@ if [[ -x $TERRAFORM_BIN ]]; then
         tf plan ${_TF_TARGET} "${@}"
     }
 
-    function _tfless() {
-        local _TF_LOG_FILE=${1-_logs/0_0_lastrun.log}
-        [[ -z "$SZ_DEBUG" ]] || echo "_tfless: ${@} | LESS_NO_WAIT = '${LESS_NO_WAIT}'"
-        [[ -n "$1" ]] && {
-            trap : INT;
-            tail -f $_TF_LOG_FILE | _tfsedFullStop;
-        } \
-        || { [[ -z "${LESS_NO_WAIT}" ]] \
-            && { less \
-                --no-init \
-                --raw-control-chars \
-                --line-numbers \
-                --quiet \
-                --hilite-unread \
-                --incsearch \
-                --ignore-case \
-                --force \
-                "${@:2}" -- \
-                "$_TF_LOG_FILE"
-                #\
-                #'+G?([^\w\W][\[0-9m+])Plan:' \
-                #'+3k'
-            }
+    function get-tf-env() {
+        local PATTERN="${1-}"
+        compgen -v | grep "^TF_${PATTERN}"
+    }
+
+    function clear-tf-env() {
+        local PATTERN="${1}"
+        local TOCLEAR=$(get-tf-env "${PATTERN}")
+        [[ -z "$TOCLEAR" ]] && {
+            echo "Could not find environment variables matching: $(echo "^TF_${PATTERN}")" 
+        } || {
+            unset $TOCLEAR
+            echo "Cleared the following vars: $TOCLEAR"
         }
     }
 
-    function _tfSetLogTS() {
-        export TF_LOG_TS=$(date -d "today" +"%Y%m%d%H%M%S")
+    function clear-tf-env-vars() {
+        clear-tf-env 'VAR_[a-z]'
     }
 
-    function tfinit() {
-        return 0
+    function clear-tf-env-targets() {
+        clear-tf-env '[A-Z_]*TARGET$'
     }
 
-    function tfplan() {
-        return 0
-    }
+    alias tf-plan-destroy='tf-plan --destroy '
+    alias tf-apply='tf apply '
+
+    alias tfp='tf-plan '
+    alias tfpd='tf-plan-destroy '
+    alias tfa='tf-apply '
+
 fi
 
