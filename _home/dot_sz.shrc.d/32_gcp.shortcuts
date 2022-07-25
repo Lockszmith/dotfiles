@@ -32,14 +32,17 @@ function gcp_get_region_quotas() {
 }
 
 function gcp_get_stack() {
-    local _cmd=$(printf 'N="%s"; CLOUDSDK_ACTIVE_CONFIG_NAME=dust-personal; echo $N; ' $1)
-    _cmd+='{ echo "Instances"; gcloud compute instances list --filter="name:$N"; } '
-    _cmd+='&& { echo "Networks"; gcloud compute networks list --filter="name:$N"; } '
-    _cmd+='&& {gcloud compute networks subnets list --filter="name:$N"} '
-    _cmd+='&& {gcloud compute disks list --filter="name:$N"}'
-    _cmd='{ }'
+    local N="${1:-$(basename $PWD)}"
+    local _cmd="{ $(printf "%s " \
+        "N='$N'; CLOUDSDK_ACTIVE_CONFIG_NAME=dust-personal; echo 'Listing $N stack:'; " \
+           '{ gcloud compute instances        list --filter="name:$N" | ' "sed s/^/Instances:\ /g ; } " \
+        '&& { gcloud compute networks         list --filter="name:$N" | ' "sed s/^/Networks.:\ /g ; } " \
+        '&& { gcloud compute networks subnets list --filter="name:$N" | ' "sed s/^/Subnets..:\ /g ; } " \
+        '&& { gcloud compute disks            list --filter="name:$N" | ' "sed s/^/Disks....:\ /g ; } " \
+    ) ;}"
     [ $# -ge 2 ] && _cmd="watch -n${2} '$_cmd'"
-    echo $_cmd
+    [[ -n ${SZ_DEBUG} ]] && printf "Executing: \n\t$_cmd\n\n"
+    eval $_cmd
 }
 # printf '\n\n'; gcp_get_stack 'dragonheart' 5
 
