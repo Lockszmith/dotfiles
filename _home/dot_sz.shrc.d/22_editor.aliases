@@ -11,15 +11,24 @@ else
   alias my_vi="$PREFERED_VI -p"
 fi
 
+export DOOMROOT="$HOME/.config/_my.emacs/doom"
+[[ -x $DOOMROOT/emacs.d/bin/doom ]] && function doom() {
+    export EMACSDIR="$DOOMROOT/emacs.d"
+    export DOOMDIR="$DOOMROOT/config"
+    "$EMACSDIR/bin/doom" "${@}"
+
+    unset EMACSDIR DOOMDIR
+} && function doomemacs() {
+    emacs --with-profile=doom ${@}
+} || unset DOOMROOT
+
 if [[ -r "$HOME/.config/_my.emacs/spacemacs/emacs.d/init.el" \
     && -n "$(which-command emacsclient)" \
     && -n "$(which-command emacs)" \
     && -n "$(which-command edit-with-spacemacs)" \
    ]]; then
-   EDITOR=$(which-command edit-with-spacemacs | head -1)
-  alias my_editor="$EDITOR "
+  alias my_editor='edit-with-spacemacs'
 else
-  EDITOR="$PREFERRED_VI"
   alias my_editor='my_vi'
 fi
 alias nvim="my_vi"

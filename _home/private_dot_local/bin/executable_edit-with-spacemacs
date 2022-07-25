@@ -39,7 +39,7 @@ function prep_path() {
   printf $_cli_path
 }
 
-$_cli --eval '(+ 1 0)' > /dev/null || {
+2>$MY_SILENT $_cli --eval '(+ 1 0)' > /dev/null || {
   echo "Starting server..."
   2>$MY_SILENT /usr/bin/emacs --bg-daemon=$MY_EMACS_PROFILE -- --with-profile=spacemacs
 }
@@ -50,5 +50,5 @@ $_cli --eval '(+ 1 0)' > /dev/null || {
 [ "$($_cli --eval '(> (length (frame-list)) 1)')" == "t" ] && MY_EMACS_CREATEFRAME=''
 
 client_args=$(prep_path "${@}")
-[ "$client_args" == "''" ] && client_args='--eval "(raise-frame)"'
+[ "$client_args" == "''" ] && client_args='--eval "(select-frame-set-input-focus (selected-frame)) (make-frame-visible (selected-frame)) (raise-frame)"'
 eval "$_cli $MY_EMACS_CREATEFRAME $MY_EMACS_NO_WAIT $client_args"

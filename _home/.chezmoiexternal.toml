@@ -6,7 +6,13 @@
 [".config/_my.emacs/spacemacs/emacs.d"]
   type          = "git-repo"
   url           = "https://github.com/syl20bnr/spacemacs.git"
-  clone.args    = ["--depth=1","--branch=develop"]
+  clone.args    = ["--depth=1","--branch=develop","--single-branch"]
+  refreshPeriod = "168h" # 7 days
+
+[".config/_my.emacs/doom/emacs.d"]
+  type          = "git-repo"
+  url           = "https://github.com/doomemacs/doomemacs"
+  clone.args    = ["--depth=1","--branch=develop","--single-branch"]
   refreshPeriod = "168h" # 7 days
 
 # ["my/code/from_web/nerd-fonts"]
