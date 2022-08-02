@@ -10,18 +10,18 @@ if [[ -x $TERRAFORM_BIN ]]; then
         basename $PWD
     }
 
-    function _tfsedFullStop() {
+    function _tf_sedFullStop() {
         sed --unbuffered '/^===FULLSTOP===$/q' | sed --unbuffered '/^===FULLSTOP===$/d'
     }
 
-    function _tfless() {
+    function less-tf() {
         local _TF_LOG_FILE=${1-_logs/0_0_lastrun.log}
         [[ "$1" == "-" ]] && _TF_LOG_FILE='_logs/0_0_lastrun.log'
-        [[ -z "$SZ_DEBUG" ]] || echo "_tfless: ${@} | LESS_NO_WAIT = '${LESS_NO_WAIT}'"
+        [[ -z "$SZ_DEBUG" ]] || echo "lessts: ${@} | LESS_NO_WAIT = '${LESS_NO_WAIT}'"
         [[ "$1" == "-" ]] && {
             [[ -z "$SZ_DEBUG" ]] || echo "tailing..."
             trap : INT;
-            tail -f $_TF_LOG_FILE | _tfsedFullStop;
+            tail -f $_TF_LOG_FILE | _tf_sedFullStop;
         } \
             || { [[ -z "${LESS_NO_WAIT}" ]] \
                      && {
@@ -44,6 +44,7 @@ if [[ -x $TERRAFORM_BIN ]]; then
         }
     }
 
+    alias tf!=_tfSetLogTS
     function _tfSetLogTS() {
         export TF_LOG_TS=$(date -d "today" +"%Y%m%d%H%M%S")
     }
@@ -65,7 +66,7 @@ if [[ -x $TERRAFORM_BIN ]]; then
         echo "===FULLSTOP===" >> _logs/0_0_lastrun.log
         } &
 
-        _tfless -
+        less-tf -
     }
 
     function tf-plan() {
