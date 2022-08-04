@@ -1,6 +1,8 @@
 alias which-command="type -fP "
 
 function add-alias-to-bash-completion-code() {
-    local CMD=$(printf "%s" "sed '" 's/\(complete\W.*-F\W.*chezmoi\)/\1 ' "$1/g'")
+    local CMD=$(printf "%s" "sed '" 's/\(complete\W.*-F\W.*' "$1" '.*$\)/\1 ' "$2/g'")
+    [[ -r "$3" ]] && CMD="$CMD -i $3"
+    [[ -n "$4" ]] && CMD="$4 $CMD"
     eval "$CMD"
 }

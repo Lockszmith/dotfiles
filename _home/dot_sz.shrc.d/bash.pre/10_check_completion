@@ -1,1 +1,4 @@
-[[ -r /usr/share/bash-completion/bash_completion ]] && BASH_COMPLETION_EXIST=1
+if [[ -r /usr/share/bash-completion/bash_completion ]]; then
+  BASH_COMPLETION_EXIST=1
+fi
+

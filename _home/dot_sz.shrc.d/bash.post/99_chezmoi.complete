@@ -1,1 +1,1 @@
-[[ -n "$BASH_COMPLETION_EXIST" && -n $(type -fP chezmoi) ]] && source <(chezmoi completion bash | add-alias-to-bash-completion-code cz )
+[[ -n "$BASH_COMPLETION_EXIST" && -n $(which-command chezmoi) ]] && source <(chezmoi completion bash | add-alias-to-bash-completion-code chezmoi cz )

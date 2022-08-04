@@ -1,6 +1,5 @@
 #! /usr/bin/env bash
 
-
 # Make sure the /usr/share/keyrings dir exists
 sudo mkdir -p /usr/share/keyrings 2>&1 > /dev/null
 
@@ -28,7 +27,7 @@ function add_repo() {
     REPO_URL=${4:-https:\/\/$REPO_FQDN}
     REPO_SUITE=${5:-$_CNM}
     REPO_CMP=${6:-main}
-    
+
     curl -fsSL $GPG_KEY_URL | sudo gpg --dearmor -o $GPG_KEY_PATH $_YES
     echo "Key created: $GPG_KEY_PATH"
     echo "deb [$(echo "$REPO_ARCH signed-by=$GPG_KEY_PATH" | xargs )] $REPO_URL $REPO_SUITE $REPO_CMP" | \
@@ -42,7 +41,7 @@ function add_repo() {
 #         ----------------------------  ------------------------------------------------------- ---------- ------------------------------------------------ ----------- ---------
 # for: docker-ce docker-ce-cli containerd.io docker-compose-plugin
 # Also don't forget:
-#   remove: docker docker-engine docker.io containerd runc 
+#   remove: docker docker-engine docker.io containerd runc
 #   possibly remove docker-compose and install: https://github.com/docker/compose-switch
 add_repo  'download.docker.com'         "https://download.docker.com/linux/$_OS/gpg"            ''         "https://download.docker.com/linux/$_OS"         ''          'stable'
 # for: anydesk
