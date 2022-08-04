@@ -31,16 +31,25 @@ function gcp_get_region_quotas() {
     #done
 }
 
+# Usage: gcp_get_stack dragonheart 10 22
+# Watch the 'dragonheart' stack,
+# refresh every 10 seconds,
+# set tmux pane to 22 lines high (on every refresh)
 function gcp_get_stack() {
     local N="${1:-$(basename $PWD)}"
-    local _cmd="{ $(printf "%s " \
-        "N='$N'; CLOUDSDK_ACTIVE_CONFIG_NAME=dust-personal; echo 'Listing $N stack:'; " \
-           '{ gcloud compute networks         list --filter="name:$N" | ' "sed s/^/Networks.:\ /g ; } " \
-        '&& { gcloud compute networks subnets list --filter="name:$N" | ' "sed s/^/Subnets..:\ /g ; } " \
-        '&& { gcloud compute disks            list --filter="name:$N" | ' "sed s/^/Disks....:\ /g ; } " \
-        '&& { gcloud compute instances        list --filter="name:$N" | ' "sed s/^/Instances:\ /g ; } " \
+    local _cmd=""
+    local _tmux=''
+    [ $# -ge 3 ] && [[ -n "$(which-command tmux)" ]] && printf "%s" "$3" > "/tmp/tmux-$1" && _cmd=$(printf "%s" 'tmux resize-pane -t "$TMUX_PANE" -y $(cat "/tmp/tmux-' "$1" '") ; ') && eval $_cmd
+    _cmd="{ $(printf "%s " \
+        "N='$N'; " \
+        "${_cmd}" \
+        "echo 'Listing $N stack:'; " \
+           '{ gcloud compute networks         list --filter="name:$N" | ' "sed --unbuffered s/^/Networks.:\ /g ; } " \
+        '&& { gcloud compute networks subnets list --filter="name:$N" | ' "sed --unbuffered s/^/Subnets..:\ /g ; } " \
+        '&& { gcloud compute disks            list --filter="name:$N" | ' "sed --unbuffered s/^/Disks....:\ /g ; } " \
+        '&& { gcloud compute instances        list --filter="name:$N" | ' "sed --unbuffered s/^/Instances:\ /g ; } " \
     ) ;}"
-    [ $# -ge 2 ] && _cmd="watch -n${2} '$_cmd'"
+    [ $# -ge 2 ] && _cmd="watch -n${2} '${_cmd}'"
     [[ -n ${SZ_DEBUG} ]] && printf "Executing: \n\t$_cmd\n\n"
     eval $_cmd
 }
