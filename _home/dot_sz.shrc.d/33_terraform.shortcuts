@@ -90,8 +90,12 @@ if [[ -x $TERRAFORM_BIN ]]; then
             echo "Could not find environment variables matching: $(echo "^TF_${PATTERN}")" 
         } || {
             unset $TOCLEAR
-            echo "Cleared the following vars: $TOCLEAR"
+            echo "Cleared the following vars: $(echo "$TOCLEAR" | xargs echo)"
         }
+    }
+
+    function get-tf-env-plan() {
+        set | grep '^TF\(_\(VAR_[a-z]\)\|\([A-Z_]TARGET=\)\)' | grep '\b='
     }
 
     function clear-tf-env-vars() {

@@ -48,6 +48,9 @@ function gcp_get_stack() {
         '&& { gcloud compute networks subnets list --filter="name:$N" | ' "sed --unbuffered s/^/Subnets..:\ /g ; } " \
         '&& { gcloud compute disks            list --filter="name:$N" | ' "sed --unbuffered s/^/Disks....:\ /g ; } " \
         '&& { gcloud compute instances        list --filter="name:$N" | ' "sed --unbuffered s/^/Instances:\ /g ; } " \
+        '&& { gcloud compute network-firewall-policies get-effective-firewalls --network="$N-network"' \
+                                                                       " | sed --unbuffered s/^/Firewall:\ /g ; } " \
+
     ) ;}"
     [ $# -ge 2 ] && _cmd="watch -n${2} '${_cmd}'"
     [[ -n ${SZ_DEBUG} ]] && printf "Executing: \n\t$_cmd\n\n"
