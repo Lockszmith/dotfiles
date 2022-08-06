@@ -12,6 +12,7 @@ require_root() {
 function setacl() {
     if [[ $# -lt 4 ]]; then
         error "setacl missing arguments, called with '$1' ${@:2}"
+	printf "%s\n" "Usage:" "\tsetacl <Options> <Ownership> <Permissions> <Path> [<Additional Paths>...]"
 	return 1
     fi
     local Options=${1}
