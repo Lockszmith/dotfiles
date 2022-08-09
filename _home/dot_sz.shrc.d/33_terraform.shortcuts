@@ -95,7 +95,7 @@ if [[ -x $TERRAFORM_BIN ]]; then
     }
 
     function get-tf-env-plan() {
-        set | grep '^TF\(_\(VAR_[a-z]\)\|\([A-Z_]TARGET=\)\)' | grep '\b='
+        set | grep '^TF\(_\(VAR_[a-z]\)\|\([A-Z_]*TARGET=\)\)' | grep '\b='
     }
 
     function clear-tf-env-vars() {
