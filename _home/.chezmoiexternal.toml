@@ -23,6 +23,12 @@
 #   clone.args    = ["--depth=1"]
 #   refreshPeriod = "168h" # 7 days
 
+[".local/share/bash-completion/tmux"]
+  type = "git-repo"
+  url  = "https://github.com/imomaliev/tmux-bash-completion"
+  clone.args    = ["--depth=1","--single-branch"]
+  refreshPeriod = "168h" # 7 days
+
 [".local/share/fonts/NF_CodeNewRoman"]
   type          = "archive"
 # url           = "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/CodeNewRoman.zip"

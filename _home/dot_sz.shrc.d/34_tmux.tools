@@ -2,4 +2,8 @@ if [[ -n "$(which-command tmux)" ]]; then
   function clip-tmux() {
     tmux save-buffer -a - | clip
   }
+
+  __C="$HOME/.local/share/bash-completion/tmux/completions/tmux"
+  [[ -r $__C ]] && . <( cat $__C )
+  unset __C
 fi
