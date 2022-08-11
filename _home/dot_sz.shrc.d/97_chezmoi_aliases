@@ -1,5 +1,8 @@
 if [[ -n "$(which-command chezmoi)" ]]; then
-  alias cdcz="cd $(chezmoi source-path)"
+  export CZ="$(chezmoi source-path)"
+  export CHEZMOIROOT="$CZ"
+
+  alias cdcz="cd $CZ"
   alias czcd="cdcz "
   
   alias cz="chezmoi "
