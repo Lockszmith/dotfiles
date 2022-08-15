@@ -6,4 +6,20 @@ if [[ -n "$(which-command tmux)" ]]; then
   __C="$HOME/.local/share/bash-completion/tmux/completions/tmux"
   [[ -r $__C ]] && . <( cat $__C )
   unset __C
+
+  function tmux-down() {
+    tmux split-window "${@}"
+  }
+
+  function tmux-up() {
+    tmux-down "${@}"; tmux swap-pane -dt -1
+  }
+
+  function tmux-right() {
+    tmux split-window -h "${@}"
+  }
+
+  function tmux-left() {
+    tmux-right "${@}"; tmux swap-pane -dt -1
+  }
 fi
