@@ -1,4 +1,4 @@
-if [[ -n "$(which-command kubectl)" ]]; then
+if [[ -n "$(which-command 'kubectl')" ]]; then
   source <( kubectl completion bash )
 fi
 
