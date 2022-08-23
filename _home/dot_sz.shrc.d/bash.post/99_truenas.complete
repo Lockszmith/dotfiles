@@ -1,0 +1,21 @@
+if ( uname --kernel-release | grep -q truenas ); then
+  # Completion code is only avialable with `sudo`, the aliases below
+  # are desined for 'lazy-loading' the completion code, when it's time
+  # to enter the sudo password.
+
+  if [[ -n "$(which-command 'k3s')" ]]; then
+    alias kubectl=' \
+      ### Lazy load `kubectl` bash-completion \
+      alias kubectl="sudo k3s kubectl "; \
+      source <( kubectl completion bash ); \
+      sudo k3s kubectl '
+  fi
+
+  if [[ -n "$(which-command 'helm')" ]]; then
+    alias helm=' \
+      ### Lazy load `helm` bash-completion \
+      alias helm="sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml helm "; \
+      source <( helm completion bash ); \
+      sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml helm '
+  fi
+fi
