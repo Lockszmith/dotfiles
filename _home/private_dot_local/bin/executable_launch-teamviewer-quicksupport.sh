@@ -24,7 +24,7 @@ if [ "${TVQS}" == "gal" ]; then
 fi
 LocalSize=$(wc -c "$LocalFile" 2>/dev/null | awk '{ print $1 }')
 RemoteSize=$(curl -sI "$RemoteFile" | awk -v IGNORECASE=1 '/^Content-Length/ {sub("\r",""); print $2}')
-if [ "$LocalSize" != "$RemoteSize" ]; then
+if [[ ! -r "${LocalFile}" ]] || [ "$LocalSize" != "$RemoteSize" ]; then
   echo "Downloading file into $LocalFile..."
   curl -Lo "$LocalFile" "$RemoteFile"
 else
