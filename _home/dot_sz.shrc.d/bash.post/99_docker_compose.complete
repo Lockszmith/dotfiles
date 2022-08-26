@@ -1,0 +1,17 @@
+if [[ -n "$BASH_COMPLETION_EXIST" && -n $(which-command docker-compose) ]]; then
+    # Function below is from https://stackoverflow.com/a/55668486/799379
+    function _delegate_docker_compose() {
+        local cur subs
+        cur="${COMP_WORDS[COMP_CWORD]}" # partial word, if any
+        subs="compose"
+        if [[ $COMP_CWORD == 2 ]]; then
+            # Two whole words before the cursor - delegate to the second arg
+            _command $2
+        else
+            # complete with the list of subcommands 
+            COMPREPLY=( $(compgen -W "${subs}" -- ${cur}) )
+        fi
+    }
+
+    # echo "NOT Running: 'complete -F _delegate_docker_compose docker'"
+fi
