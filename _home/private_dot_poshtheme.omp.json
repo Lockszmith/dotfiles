@@ -63,7 +63,7 @@
           "style": "powerline",
           "properties": {
             "shell": "bash",
-            "command": "systemctl is-system-running || true"
+            "command": "'[[ -n \"$(type -t systemctl)\" ]] && systemctl is-system-running || true'"
           },
           "template": "{{ if not (contains \"running\" .Output) }} {{ .Output }} {{ end }}"
         },
