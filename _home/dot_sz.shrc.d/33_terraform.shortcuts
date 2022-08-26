@@ -44,7 +44,6 @@ if [[ -x $TERRAFORM_BIN ]]; then
         }
     }
 
-    alias tf!=_tfSetLogTS
     function _tfSetLogTS() {
         export TF_LOG_TS=$(date -d "today" +"%Y%m%d%H%M%S")
     }
@@ -55,6 +54,9 @@ if [[ -x $TERRAFORM_BIN ]]; then
         [[ "${@}" =~ "-destroy" ]] && NAME="$1-destroy"
 
         echo "===_logs/0_$NAME.log===" > _logs/0_0_lastrun.log
+        echo "===_logs/${TF_LOG_TS}_$NAME.log===" \
+            | tee --append _logs/0_0_lastrun.log \
+            > _logs/0_$NAME.log
         [[ -z "$SZ_DEBUG" ]] || echo "Executing: terraform ${@}"
         {
         terraform "${@}" 2>&1 \
@@ -69,6 +71,12 @@ if [[ -x $TERRAFORM_BIN ]]; then
         less-tf -
     }
 
+    function tf0() {
+        _tfSetLogTS
+        [ $# -eq 0 ] && return
+        tf "$@"
+    }
+
     function tf-plan() {
         [[ -z "$SZ_DEBUG" ]] || echo "DEBUG: tfplan ${@}"
         local _TF_TARGET=""
@@ -77,6 +85,8 @@ if [[ -x $TERRAFORM_BIN ]]; then
 
         tf plan ${_TF_TARGET} "${@}"
     }
+
+    alias 'tf0-plan'='_tfSetLogTS; tf-plan '
 
     function get-tf-env() {
         local PATTERN="${1-}"
@@ -106,7 +116,7 @@ if [[ -x $TERRAFORM_BIN ]]; then
         clear-tf-env '[A-Z_]*TARGET$'
     }
 
-    alias tf-plan-destroy='tf-plan --destroy '
+    alias tf-plan-destroy='tf0-plan --destroy '
     alias tf-apply='tf apply '
 
     alias tfp='tf-plan '

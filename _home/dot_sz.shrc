@@ -3,10 +3,11 @@
 
 case $- in
     *i*) echo "Welcome $USER to $(hostname)";;
-      *) return;;
+      *) [ -z "${INCLUDE_SZSHRC}" ] && return;;
 esac
 
 if [ -d ~/.sz.shrc.d ]; then
+  [ -z ${DBG_SZSHRC} ] || ps -p$$ -ho comm
   script_source=("$(find ~/.sz.shrc.d -maxdepth 1 -type d -name "$(ps -p$$ -ho comm).pre")")
   script_source+=("$(find ~/.sz.shrc.d -maxdepth 0 -type d)")
   script_source+=("$(find ~/.sz.shrc.d -maxdepth 1 -type d -name "$(ps -p$$ -ho comm).post")")
