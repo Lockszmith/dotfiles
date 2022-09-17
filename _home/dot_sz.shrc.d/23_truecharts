@@ -1,6 +1,26 @@
-if [[ -x "/mnt/szmedia/_apps.data/_scripts/truetool/truetool.sh" ]]; then
+[[ -r /etc/apt/sources.list ]] \
+    && ixsystems_system=$(cat /etc/apt/sources.list | grep '^deb https\?://apt\.tn\.ixsystems\.com' | wc -l) \
+    && [[ $ixsystems_system -lt 11 ]] \
+    && unset ixsystems_system
+
+if [[ -n "$ixsystems_system" ]]; then
+    if ! [[ -r /tmp/truenas_scriptpath ]]; then
+        /sbin/zpool list -Ho name | \
+	    grep -v 'boot-pool' | \
+	    while read pool; do 
+	        /sbin/zfs list -rHo name $pool | \
+		    grep "^$pool/[a-z\._]*data/_\?scripts"
+	    done | \
+            while read dataset; do
+	        /sbin/zfs list -Ho mountpoint $dataset
+	    done > /tmp/truenas_scriptpath
+  fi
+  truenas_scriptspath=$(cat /tmp/truenas_scriptpath)
+fi
+
+if [[ -n "$truenas_scriptspath" && -x "${truenas_scriptspath}/truetool/truetool.sh" ]]; then
   function truetool() {
-    pushd /mnt/szmedia/_apps.data/_scripts/truetool > /dev/null
+    pushd ${truenas_scriptspath}/truetool > /dev/null
     sudo ./truetool.sh "${@}"
     popd > /dev/null
   }

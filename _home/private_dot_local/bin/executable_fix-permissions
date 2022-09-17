@@ -1,0 +1,18 @@
+#! /usr/bin/env bash
+
+SOURCE=${BASH_SOURCE[0]}
+while [ -L "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
+  SOURCE=$(readlink "$SOURCE")
+  [[ $SOURCE != /* ]] && SOURCE=$DIR/$SOURCE # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
+
+[[ -r "$DIR/01_util.functions" ]] && . "$DIR/01_util.functions" || {
+  [[ -r ~/.sz.shrc.d/01_util.functions ]] && . ~/.sz.shrc.d/01_util.functions
+}
+[[ -z "$(type -t require_root)" ]] && (>&2 printf '\E[31mERROR:\E[0m %s\n' "Failed to load 01_util.functions" ) && exit 1
+
+require_root
+
+error "This is an error"
