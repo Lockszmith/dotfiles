@@ -54,3 +54,32 @@
   exact         = true
   refreshPeriod = "168h" # 7 days
 
+[".config/Code/Dictionaries/English (American).dic"]
+  type          = "file"
+  url           = "https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/English%20(American).dic"
+  refreshPeriod = "168h" # 7 days
+
+[".config/Code/Dictionaries/English (American).aff"]
+  type          = "file"
+  url           = "https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/English%20(American).aff"
+  refreshPeriod = "168h" # 7 days
+
+[".config/Code/Dictionaries/English (American).txt"]
+  type          = "file"
+  url           = "https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/English%20(American).txt"
+  refreshPeriod = "168h" # 7 days
+
+[".config/Code/Dictionaries/Hebrew (Israel).dic"]
+  type          = "file"
+  url           = "https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Hebrew%20(Israel).dic"
+  refreshPeriod = "168h" # 7 days
+
+[".config/Code/Dictionaries/Hebrew (Israel).aff"]
+  type          = "file"
+  url           = "https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Hebrew%20(Israel).aff"
+  refreshPeriod = "168h" # 7 days
+
+[".config/Code/Dictionaries/Hebrew (Israel).txt"]
+  type          = "file"
+  url           = "https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Hebrew%20(Israel).txt"
+  refreshPeriod = "168h" # 7 days

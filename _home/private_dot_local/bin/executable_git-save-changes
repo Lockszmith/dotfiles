@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+
+pushd . > /dev/null
+cd $(git rev-parse --show-toplevel)
+ARCHIVE=${1:-/tmp/$(basename $PWD .git)-$(git branch --show-current).git}
+[[ -d "$ARCHIVE" || "$ARCHIVE" != "${ARCHIVE%/}" ]] \
+    && ARCHIVE=${1%/}/$(basename $PWD .git)-$(git branch --show-current).git
+DIRNAME=$(dirname $ARCHIVE)
+[[ ! -d "$DIRNAME" ]] \
+    && echo "Directory $DIRNAME is missing, creating it..." \
+    && mkdir -p $DIRNAME
+ARCHIVE=$DIRNAME/$(basename $ARCHIVE .tgz).tgz
+printf "Archiving into %s...\n\n" "$ARCHIVE"
+tar czvf $ARCHIVE $(git diff --diff-filter=ACMRT --name-only "${@:2}") \
+    && printf "\nDone.\n\n"
+popd > /dev/null
